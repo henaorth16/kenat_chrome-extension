@@ -1,0 +1,320 @@
+@font-face {
+  font-family: 'Hibur Mono';
+  src: url('/fonts/HiburMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('/fonts/Outfit.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light dark;
+
+  --font-ui: 'Outfit', -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-ethiopic: 'Hibur Mono', 'Noto Sans Ethiopic', monospace;
+
+  /* macOS Sequoia/Sonoma style vibrant light theme background */
+  --bg: #f5f5f7;
+  --bg-accent: 
+    radial-gradient(circle at 5% 5%, rgba(0, 168, 150, 0.09) 0%, transparent 40%),
+    radial-gradient(circle at 95% 10%, rgba(255, 184, 0, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 50% 90%, rgba(0, 122, 255, 0.07) 0%, transparent 50%),
+    radial-gradient(circle at 85% 85%, rgba(255, 107, 107, 0.06) 0%, transparent 35%),
+    linear-gradient(180deg, #f5f5f7 0%, #e8e8ed 100%);
+
+  /* Apple Translucent Glass Materials - Light Mode */
+  --surface: rgba(255, 255, 255, 0.45);
+  --surface-strong: rgba(255, 255, 255, 0.75);
+  --surface-soft: rgba(255, 255, 255, 0.25);
+  --border: rgba(255, 255, 255, 0.35);
+  --border-inner: rgba(0, 0, 0, 0.05);
+  --border-strong: rgba(0, 0, 0, 0.1);
+  --label: #1d1d1f;
+  --label-secondary: #86868b;
+  --label-tertiary: #aeaeb2;
+  
+  /* Refined High-Vibrancy Accents */
+  --accent: #00828a; /* Clean Cupertino-style Teal */
+  --accent-soft: rgba(0, 130, 138, 0.09);
+  --accent-deep: #006369;
+  --gold: #b57c1e; /* Sophisticated gold for calendar and key indicators */
+  --gold-soft: rgba(181, 124, 30, 0.12);
+  --danger: #ff3b30; /* Apple System Red */
+  --danger-soft: rgba(255, 59, 48, 0.1);
+  
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.01);
+  
+  --radius: 24px; /* iPadOS/macOS standard widget corner radius */
+  --radius-sm: 12px;
+  --radius-pill: 999px;
+  --blur: 24px;
+}
+
+[data-theme='dark'] {
+  /* macOS Sequoia/Sonoma style vibrant dark theme background */
+  --bg: #090a0f;
+  --bg-accent: 
+    radial-gradient(circle at 10% 10%, rgba(48, 176, 184, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, rgba(181, 124, 30, 0.09) 0%, transparent 45%),
+    radial-gradient(circle at 50% 85%, rgba(175, 82, 222, 0.1) 0%, transparent 55%),
+    radial-gradient(circle at 75% 75%, rgba(52, 199, 89, 0.06) 0%, transparent 40%),
+    linear-gradient(180deg, #090a0f 0%, #15161c 100%);
+
+  /* Apple Translucent Glass Materials - Dark Mode */
+  --surface: rgba(28, 30, 36, 0.45);
+  --surface-strong: rgba(40, 44, 52, 0.7);
+  --surface-soft: rgba(20, 22, 28, 0.3);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-inner: rgba(255, 255, 255, 0.04);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --label: #f5f5f7;
+  --label-secondary: #86868b;
+  --label-tertiary: #636366;
+  
+  --accent: #30b0b8; /* Glowing teal for dark mode */
+  --accent-soft: rgba(48, 176, 184, 0.14);
+  --accent-deep: #52c5cc;
+  --gold: #d4af37;
+  --gold-soft: rgba(212, 175, 55, 0.15);
+  --danger: #ff453a; /* Apple Dark Mode System Red */
+  --danger-soft: rgba(255, 69, 58, 0.15);
+  
+  --shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 1px 4px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 6px 20px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  color: var(--label);
+  background: var(--bg);
+  background-image: var(--bg-accent);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Custom Scrollbar - thin, rounded overlay style */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 99px;
+}
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.24);
+}
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.ethiopic {
+  font-family: var(--font-ethiopic);
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Glassmorphic Panel Core class */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(var(--blur)) saturate(190%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(190%);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              border-color 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.panel:hover {
+  box-shadow: var(--shadow);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+[data-theme='dark'] .panel:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Apple Sidebar Header Style */
+.panel-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--label-secondary);
+  opacity: 0.8;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 50%;
+  color: var(--label-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background 150ms ease, color 150ms ease, transform 150ms ease, border-color 150ms ease;
+}
+
+.icon-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.icon-btn:active {
+  transform: scale(0.94);
+}
+
+/* macOS Styled Form Field */
+.field {
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-inner);
+  background: var(--surface-strong);
+  outline: none;
+  color: var(--label);
+  font-size: 0.82rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+  background: var(--surface-strong);
+}
+
+/* Apple Primary Button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 30px;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.82rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: opacity 140ms ease, transform 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.94;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+}
+
+/* Apple Ghost Button */
+.btn-ghost {
+  min-height: 26px;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-pill);
+  color: var(--label-secondary);
+  font-size: 0.76rem;
+  font-weight: 600;
+  transition: background-color 140ms ease, color 140ms ease, transform 140ms ease;
+}
+
+.btn-ghost:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.btn-ghost:active {
+  transform: scale(0.96);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-in {
+  animation: fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in {
+    animation: none;
+  }
+
+  .hand.second,
+  .icon-btn,
+  .btn-primary,
+  .btn-ghost,
+  .panel {
+    transition: none;
+  }
+}
