@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useApp } from '../context/AppContext'
 import {
   convertTemp,
@@ -179,7 +180,7 @@ export function WeatherChip() {
             </div>
             <div className="weather-detail-col">
               <div className="weather-desc-row">
-                <WeatherIcon code={weather.weatherCode} size={22} />
+                <WeatherIcon code={weather.weatherCode} size={26} />
                 <div className="weather-desc-meta">
                   <span className="weather-loc">{settings.weatherLocation.name}</span>
                 </div>
@@ -189,155 +190,159 @@ export function WeatherChip() {
         )}
       </button>
 
-      {/* Drawer Overlay Backdrop */}
-      {isDrawerOpen && (
-        <div 
-          className="weather-drawer-overlay" 
-          onClick={() => {
-            setIsDrawerOpen(false)
-            setQuery('')
-          }}
-        />
-      )}
+      {/* Drawer Overlay Backdrop & Drawer rendered via React Portal to escape parent animation transforms */}
+      {createPortal(
+        <>
+          {isDrawerOpen && (
+            <div 
+              className="weather-drawer-overlay" 
+              onClick={() => {
+                setIsDrawerOpen(false)
+                setQuery('')
+              }}
+            />
+          )}
 
-      {/* Sliding Weather Forecast Drawer */}
-      <div className={`weather-drawer panel ${isDrawerOpen ? 'is-open' : ''}`}>
-        <header className="weather-drawer-head">
-          <div className="drawer-title-wrap">
-            <h2 className="weather-loc-title">{settings.weatherLocation.name}</h2>
-            {weather && (
-              <span className={`weather-drawer-cond ${chromeAm ? 'ethiopic' : ''}`}>
-                {weatherLabel(weather.weatherCode, chromeLang)}
-              </span>
+          <div className={`weather-drawer panel ${isDrawerOpen ? 'is-open' : ''}`}>
+            <header className="weather-drawer-head">
+              <div className="drawer-title-wrap">
+                <h2 className="weather-loc-title">{settings.weatherLocation.name}</h2>
+                {weather && (
+                  <span className={`weather-drawer-cond ${chromeAm ? 'ethiopic' : ''}`}>
+                    {weatherLabel(weather.weatherCode, chromeLang)}
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                className="icon-btn close-btn"
+                onClick={() => {
+                  setIsDrawerOpen(false)
+                  setQuery('')
+                }}
+              >
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </header>
+
+            {weather && temp !== null && feels !== null && (
+              <div className="weather-drawer-body">
+                {/* Giant Temp Display */}
+                <div className="weather-drawer-hero">
+                  <WeatherIcon code={weather.weatherCode} size={64} />
+                  <div className="drawer-hero-temp">
+                    <strong>{temp}°</strong>
+                    <p>
+                      H: {high}° &nbsp;&nbsp; L: {low}°
+                    </p>
+                  </div>
+                </div>
+
+                {/* Quick Metrics Grid */}
+                <div className="weather-metrics-grid">
+                  <div className="metric-card panel">
+                    <span>{dict.feelsLike}</span>
+                    <strong>{feels}°</strong>
+                  </div>
+                  <div className="metric-card panel">
+                    <span>Humidity</span>
+                    <strong>{weather.humidity}%</strong>
+                  </div>
+                  <div className="metric-card panel">
+                    <span>Wind</span>
+                    <strong>{Math.round(weather.windSpeed)} km/h</strong>
+                  </div>
+                </div>
+
+                {/* Hourly Forecast */}
+                <div className="drawer-section">
+                  <span className="drawer-section-title">Hourly Forecast</span>
+                  <div className="hourly-forecast-row">
+                    {weather.hourly.map((h, idx) => (
+                      <div key={idx} className="hourly-chip panel">
+                        <span className="hourly-time">{formatHour(h.time)}</span>
+                        <WeatherIcon code={h.weatherCode} size={20} />
+                        <span className="hourly-temp">{convertTemp(h.temp, settings.tempUnit)}°</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 5-Day Forecast */}
+                <div className="drawer-section">
+                  <span className="drawer-section-title">5-Day Forecast</span>
+                  <div className="daily-forecast-list">
+                    {weather.daily.map((d, idx) => (
+                      <div key={idx} className="daily-row panel">
+                        <span className="daily-day-name ethiopic">{formatDay(d.date, idx)}</span>
+                        <WeatherIcon code={d.weatherCode} size={22} />
+                        <div className="daily-range">
+                          <span className="daily-low">{convertTemp(d.min, settings.tempUnit)}°</span>
+                          <div className="daily-progress-bar" />
+                          <span className="daily-high">{convertTemp(d.max, settings.tempUnit)}°</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Location Search Bar */}
+                <div className="drawer-section location-search-section">
+                  <span className="drawer-section-title">{dict.location}</span>
+                  <input
+                    className="field search-city-input"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={dict.searchCity}
+                  />
+                  {results.length > 0 && (
+                    <ul className="drawer-search-results panel">
+                      {results.map((r) => (
+                        <li key={`${r.name}-${r.latitude}`}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              void updateSettings({ weatherLocation: r })
+                              setQuery('')
+                              setResults([])
+                            }}
+                          >
+                            {r.name}
+                            {r.country ? `, ${r.country}` : ''}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
             )}
+
+            <footer className="weather-drawer-footer">
+              <div className="weather-units">
+                <button
+                  type="button"
+                  className={settings.tempUnit === 'celsius' ? 'btn-primary' : 'btn-ghost'}
+                  onClick={() => void updateSettings({ tempUnit: 'celsius' })}
+                >
+                  °C
+                </button>
+                <button
+                  type="button"
+                  className={settings.tempUnit === 'fahrenheit' ? 'btn-primary' : 'btn-ghost'}
+                  onClick={() => void updateSettings({ tempUnit: 'fahrenheit' })}
+                >
+                  °F
+                </button>
+              </div>
+            </footer>
           </div>
-          <button
-            type="button"
-            className="icon-btn close-btn"
-            onClick={() => {
-              setIsDrawerOpen(false)
-              setQuery('')
-            }}
-          >
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </header>
-
-        {weather && temp !== null && feels !== null && (
-          <div className="weather-drawer-body">
-            {/* Giant Temp Display */}
-            <div className="weather-drawer-hero">
-              <WeatherIcon code={weather.weatherCode} size={64} />
-              <div className="drawer-hero-temp">
-                <strong>{temp}°</strong>
-                <p>
-                  H: {high}° &nbsp;&nbsp; L: {low}°
-                </p>
-              </div>
-            </div>
-
-            {/* Quick Metrics Grid */}
-            <div className="weather-metrics-grid">
-              <div className="metric-card panel">
-                <span>{dict.feelsLike}</span>
-                <strong>{feels}°</strong>
-              </div>
-              <div className="metric-card panel">
-                <span>Humidity</span>
-                <strong>{weather.humidity}%</strong>
-              </div>
-              <div className="metric-card panel">
-                <span>Wind</span>
-                <strong>{Math.round(weather.windSpeed)} km/h</strong>
-              </div>
-            </div>
-
-            {/* Hourly Forecast */}
-            <div className="drawer-section">
-              <span className="drawer-section-title">Hourly Forecast</span>
-              <div className="hourly-forecast-row">
-                {weather.hourly.map((h, idx) => (
-                  <div key={idx} className="hourly-chip panel">
-                    <span className="hourly-time">{formatHour(h.time)}</span>
-                    <WeatherIcon code={h.weatherCode} size={20} />
-                    <span className="hourly-temp">{convertTemp(h.temp, settings.tempUnit)}°</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 5-Day Forecast */}
-            <div className="drawer-section">
-              <span className="drawer-section-title">5-Day Forecast</span>
-              <div className="daily-forecast-list">
-                {weather.daily.map((d, idx) => (
-                  <div key={idx} className="daily-row panel">
-                    <span className="daily-day-name ethiopic">{formatDay(d.date, idx)}</span>
-                    <WeatherIcon code={d.weatherCode} size={22} />
-                    <div className="daily-range">
-                      <span className="daily-low">{convertTemp(d.min, settings.tempUnit)}°</span>
-                      <div className="daily-progress-bar" />
-                      <span className="daily-high">{convertTemp(d.max, settings.tempUnit)}°</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Location Search Bar */}
-            <div className="drawer-section location-search-section">
-              <span className="drawer-section-title">{dict.location}</span>
-              <input
-                className="field search-city-input"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={dict.searchCity}
-              />
-              {results.length > 0 && (
-                <ul className="drawer-search-results panel">
-                  {results.map((r) => (
-                    <li key={`${r.name}-${r.latitude}`}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          void updateSettings({ weatherLocation: r })
-                          setQuery('')
-                          setResults([])
-                        }}
-                      >
-                        {r.name}
-                        {r.country ? `, ${r.country}` : ''}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        )}
-
-        <footer className="weather-drawer-footer">
-          <div className="weather-units">
-            <button
-              type="button"
-              className={settings.tempUnit === 'celsius' ? 'btn-primary' : 'btn-ghost'}
-              onClick={() => void updateSettings({ tempUnit: 'celsius' })}
-            >
-              °C
-            </button>
-            <button
-              type="button"
-              className={settings.tempUnit === 'fahrenheit' ? 'btn-primary' : 'btn-ghost'}
-              onClick={() => void updateSettings({ tempUnit: 'fahrenheit' })}
-            >
-              °F
-            </button>
-          </div>
-        </footer>
-      </div>
+        </>,
+        document.body
+      )}
     </div>
   )
 }
