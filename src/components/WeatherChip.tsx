@@ -10,6 +10,7 @@ import {
 } from '../lib/weather'
 import type { WeatherLocation } from '../lib/types'
 import { uiLang } from '../lib/types'
+import { IoLocationSharp } from 'react-icons/io5'
 import './WeatherChip.css'
 
 function WeatherIcon({ code, size = 32 }: { code: number; size?: number }) {
@@ -182,7 +183,10 @@ export function WeatherChip() {
               <div className="weather-desc-row">
                 <WeatherIcon code={weather.weatherCode} size={34} />
                 <div className="weather-desc-meta">
-                  <span className="weather-loc">{settings.weatherLocation.name} 📍</span>
+                  <span className="weather-loc" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
+                    <IoLocationSharp size={11} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                    {settings.weatherLocation.name}
+                  </span>
                 </div>
               </div>
             </div>

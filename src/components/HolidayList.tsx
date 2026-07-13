@@ -5,6 +5,8 @@ import { getToday, getUpcomingHolidays } from '../lib/kenat'
 import { calLang, uiLang } from '../lib/types'
 import './HolidayList.css'
 
+import { LuCalendarDays } from 'react-icons/lu'
+
 interface AgendaItem {
   id: string
   name: string
@@ -61,7 +63,7 @@ export function HolidayList() {
             : (Kenat.formatDistance(breakdown, {
                 units: ['days'],
                 lang: distanceKenatLang,
-              }) as string)
+                }) as string)
 
         return [{
           id: evt.id,
@@ -90,22 +92,10 @@ export function HolidayList() {
   return (
     <section className="holiday-list panel animate-in">
       <div className="panel-header-clean">
-        <svg
-          width="13"
-          height="13"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-          <line x1="16" y1="2" x2="16" y2="6"></line>
-          <line x1="8" y1="2" x2="8" y2="6"></line>
-          <line x1="3" y1="10" x2="21" y2="10"></line>
-        </svg>
-        <span className={chromeAm ? 'ethiopic' : ''}>Agenda</span>
+        <LuCalendarDays size={14} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+        <span className={chromeAm ? 'ethiopic' : ''}>
+          {chromeAm ? 'የሚመጡ በዓላት' : 'Upcoming Holiday'}
+        </span>
       </div>
 
       <ul>

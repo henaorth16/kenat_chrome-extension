@@ -27,7 +27,7 @@
 
 .calendar-title h2 {
   margin: 0;
-  font-size: 0.92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--label);
@@ -36,7 +36,7 @@
 
 .calendar-title span {
   display: block;
-  font-size: 0.68rem;
+  font-size: 0.76rem;
   font-weight: 600;
   color: var(--label-secondary);
 }
@@ -56,10 +56,10 @@
 
 .calendar-weekdays div {
   text-align: center;
-  font-size: 0.58rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  color: var(--label-secondary);
-  opacity: 0.85;
+  color: var(--label);
+  opacity: 1;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -92,8 +92,9 @@
 }
 
 .day-num {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   font-weight: 600;
+  color: var(--label);
   line-height: 1;
 }
 

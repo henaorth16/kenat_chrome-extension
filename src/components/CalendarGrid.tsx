@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { LuSparkles } from 'react-icons/lu'
 import { useApp } from '../context/AppContext'
 import { createMonthGrid, getToday } from '../lib/kenat'
 import { calT } from '../i18n'
@@ -221,7 +222,10 @@ export function CalendarGrid() {
               {dayHolidays.map((h, hIdx) => (
                 <div key={`holiday-${hIdx}`} className="popover-event-row holiday-item">
                   <span className="event-cat-dot holiday" />
-                  <span className="event-row-title ethiopic">🎉 {h.name}</span>
+                  <span className="event-row-title ethiopic" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                    <LuSparkles size={11} style={{ color: 'var(--gold)', flexShrink: 0 }} />
+                    {h.name}
+                  </span>
                   <span className="holiday-badge-text">Public Holiday</span>
                 </div>
               ))}
