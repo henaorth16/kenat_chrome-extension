@@ -7,10 +7,7 @@
   animation-delay: 140ms;
 }
 
-.todo-panel .panel-title {
-  margin-bottom: 0.45rem;
-  flex-shrink: 0;
-}
+
 
 .todo-form {
   display: flex;

@@ -1,10 +1,11 @@
-import type { AppSettings, CountdownItem, TodoItem } from './types'
+import type { AppSettings, CountdownItem, TodoItem, UserEventItem } from './types'
 import { DEFAULT_SETTINGS } from './types'
 
 const KEYS = {
   settings: 'kenat_settings',
   todos: 'kenat_todos',
   countdowns: 'kenat_countdowns',
+  userEvents: 'kenat_user_events',
 } as const
 
 async function getLocalRaw(key: string): Promise<unknown | undefined> {
@@ -67,4 +68,14 @@ export async function saveCountdowns(
   countdowns: CountdownItem[],
 ): Promise<void> {
   await setLocal(KEYS.countdowns, countdowns)
+}
+
+export async function loadUserEvents(): Promise<UserEventItem[]> {
+  return getLocal<UserEventItem[]>(KEYS.userEvents, [])
+}
+
+export async function saveUserEvents(
+  events: UserEventItem[],
+): Promise<void> {
+  await setLocal(KEYS.userEvents, events)
 }

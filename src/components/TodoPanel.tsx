@@ -44,7 +44,13 @@ export function TodoPanel() {
 
   return (
     <section className="todo-panel panel animate-in">
-      <h2 className={`panel-title ${chromeAm ? 'ethiopic' : ''}`}>{dict.todos}</h2>
+      <div className="panel-header-clean">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span className={chromeAm ? 'ethiopic' : ''}>{dict.todos}</span>
+      </div>
       <form className="todo-form" onSubmit={add}>
         <input
           className={`field ${chromeAm ? 'ethiopic' : ''}`}

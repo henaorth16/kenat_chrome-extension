@@ -295,6 +295,19 @@ button {
   animation: fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.panel-header-clean {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--label-secondary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+  flex-shrink: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-in {
     animation: none;

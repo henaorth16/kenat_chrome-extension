@@ -43,6 +43,7 @@ export function SearchBar() {
           />
         </svg>
         <input
+          id="search-input"
           className={`search-input ${chromeAm ? 'ethiopic' : ''}`}
           value={query}
           onChange={(e) => setQuery(e.target.value)}

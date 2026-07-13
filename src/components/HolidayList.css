@@ -7,10 +7,7 @@
   animation-delay: 100ms;
 }
 
-.holiday-list .panel-title {
-  margin-bottom: 0.45rem;
-  flex-shrink: 0;
-}
+
 
 .holiday-list ul {
   list-style: none;

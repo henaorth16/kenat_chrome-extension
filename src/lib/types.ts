@@ -30,6 +30,7 @@ export interface AppSettings {
   numeralStyle: NumeralStyle
   weatherLocation: WeatherLocation
   notifyCountdowns: boolean
+  wallpaperMode: 'solid' | 'unsplash'
 }
 
 export interface TodoItem {
@@ -49,6 +50,16 @@ export interface CountdownItem {
   createdAt: number
 }
 
+export interface UserEventItem {
+  id: string
+  title: string
+  category: string // 'personal' | 'work' | 'important'
+  year: number
+  month: number
+  day: number
+  createdAt: number
+}
+
 export const DEFAULT_LOCATION: WeatherLocation = {
   name: 'Addis Ababa',
   latitude: 9.03,
@@ -64,6 +75,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   numeralStyle: 'arabic',
   weatherLocation: DEFAULT_LOCATION,
   notifyCountdowns: true,
+  wallpaperMode: 'solid',
 }
 
 export const SEARCH_URLS: Record<SearchEngine, (q: string) => string> = {

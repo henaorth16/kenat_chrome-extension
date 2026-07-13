@@ -12,11 +12,13 @@ import {
   loadCountdowns,
   loadSettings,
   loadTodos,
+  loadUserEvents,
   saveCountdowns,
   saveSettings,
   saveTodos,
+  saveUserEvents,
 } from '../lib/storage'
-import type { AppSettings, CountdownItem, TodoItem } from '../lib/types'
+import type { AppSettings, CountdownItem, TodoItem, UserEventItem } from '../lib/types'
 import { DEFAULT_SETTINGS, uiLang } from '../lib/types'
 import { t, type Dictionary } from '../i18n'
 
@@ -25,11 +27,13 @@ interface AppContextValue {
   settings: AppSettings
   todos: TodoItem[]
   countdowns: CountdownItem[]
+  userEvents: UserEventItem[]
   dict: Dictionary
   resolvedTheme: 'light' | 'dark'
   updateSettings: (patch: Partial<AppSettings>) => Promise<void>
   setTodos: (todos: TodoItem[]) => Promise<void>
   setCountdowns: (items: CountdownItem[]) => Promise<void>
+  setUserEvents: (events: UserEventItem[]) => Promise<void>
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -47,6 +51,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
   const [todos, setTodosState] = useState<TodoItem[]>([])
   const [countdowns, setCountdownsState] = useState<CountdownItem[]>([])
+  const [userEvents, setUserEventsState] = useState<UserEventItem[]>([])
   const [prefersDark, setPrefersDark] = useState(
     () => window.matchMedia('(prefers-color-scheme: dark)').matches,
   )
@@ -61,8 +66,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false
     ;(async () => {
-      const [{ settings: storedSettings, isFresh }, todoList, countdownList] =
-        await Promise.all([loadSettings(), loadTodos(), loadCountdowns()])
+      const [{ settings: storedSettings, isFresh }, todoList, countdownList, userEventList] =
+        await Promise.all([loadSettings(), loadTodos(), loadCountdowns(), loadUserEvents()])
       if (cancelled) return
 
       const next: AppSettings = isFresh
@@ -84,6 +89,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setSettings(next)
       setTodosState(todoList)
       setCountdownsState(countdownList)
+      setUserEventsState(userEventList)
       setReady(true)
       await syncCountdownAlarms(countdownList, next.notifyCountdowns)
     })()
@@ -139,27 +145,39 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [settings.notifyCountdowns],
   )
 
+  const setUserEvents = useCallback(
+    async (next: UserEventItem[]) => {
+      setUserEventsState(next)
+      await saveUserEvents(next)
+    },
+    [],
+  )
+
   const value = useMemo<AppContextValue>(
     () => ({
       ready,
       settings,
       todos,
       countdowns,
+      userEvents,
       dict: t(settings.language),
       resolvedTheme,
       updateSettings,
       setTodos,
       setCountdowns,
+      setUserEvents,
     }),
     [
       ready,
       settings,
       todos,
       countdowns,
+      userEvents,
       resolvedTheme,
       updateSettings,
       setTodos,
       setCountdowns,
+      setUserEvents,
     ],
   )
 

@@ -138,21 +138,178 @@
   color: var(--accent);
 }
 
-.day-dot {
+.day-dots-container {
   position: absolute;
   bottom: 0.15rem;
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.day-dot {
   width: 3.5px;
   height: 3.5px;
   border-radius: 50%;
+}
+
+.day-dot.holiday {
   background: var(--accent);
 }
 
+.day-dot.user {
+  background: #34c759; /* Apple System Green for user events */
+}
+
+[data-theme='dark'] .day-dot.user {
+  background: #30d158;
+}
+
 .day.is-today .day-dot {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.9) !important;
 }
 
 .day-today-tag {
   display: none;
 }
 
+/* Absolute Event Popover Card overlaying calendar */
+.calendar-event-popover {
+  position: absolute;
+  inset: 0.45rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 0.65rem;
+  background: var(--surface-strong);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
 
+.popover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+  flex-shrink: 0;
+}
+
+.popover-head h3 {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--label);
+  letter-spacing: -0.01em;
+}
+
+.popover-head .close-btn {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  padding: 0;
+  background: var(--border-inner);
+}
+
+.popover-events-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 0.45rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.no-events-text {
+  font-size: 0.72rem;
+  color: var(--label-secondary);
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.popover-event-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.25rem 0.35rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 6px;
+  border: 1px solid var(--border-inner);
+}
+
+[data-theme='dark'] .popover-event-row {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.event-cat-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.event-cat-dot.personal {
+  background: #34c759;
+}
+
+.event-cat-dot.work {
+  background: #007aff;
+}
+
+.event-cat-dot.important {
+  background: #ff9500;
+}
+
+.event-row-title {
+  flex: 1;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popover-event-row .delete-btn {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  color: var(--label-secondary);
+}
+
+.popover-event-row .delete-btn:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.popover-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border-top: 1px solid var(--border-inner);
+  padding-top: 0.45rem;
+  flex-shrink: 0;
+}
+
+.popover-add-form .field {
+  padding: 0.3rem 0.55rem;
+  font-size: 0.76rem;
+}
+
+.form-row-compact {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.form-row-compact select.field {
+  flex: 1;
+}
+
+.popover-add-form .btn-primary {
+  min-height: 24px;
+  padding: 0 0.65rem;
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}

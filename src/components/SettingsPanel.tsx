@@ -91,6 +91,22 @@ export function SettingsPanel() {
             </select>
           </label>
 
+          <label className="settings-row">
+            <span className={chromeAm ? 'ethiopic' : ''}>Background</span>
+            <select
+              className="field"
+              value={settings.wallpaperMode}
+              onChange={(e) =>
+                void updateSettings({
+                  wallpaperMode: e.target.value as 'solid' | 'unsplash',
+                })
+              }
+            >
+              <option value="solid">Solid Color</option>
+              <option value="unsplash">Landscape Photo</option>
+            </select>
+          </label>
+
           <label className="settings-check">
             <input
               type="checkbox"

@@ -50,9 +50,13 @@ export function CountdownPanel() {
   return (
     <section className="countdown-panel panel animate-in">
       <div className="countdown-head">
-        <h2 className={`panel-title ${chromeAm ? 'ethiopic' : ''}`}>
-          {dict.countdowns}
-        </h2>
+        <div className="panel-header-clean">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span className={chromeAm ? 'ethiopic' : ''}>{dict.countdowns}</span>
+        </div>
         <button
           type="button"
           className="btn-ghost"

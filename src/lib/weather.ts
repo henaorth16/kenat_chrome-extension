@@ -1,5 +1,18 @@
 import type { WeatherLocation } from './types'
 
+export interface HourlyForecast {
+  time: string
+  temp: number
+  weatherCode: number
+}
+
+export interface DailyForecast {
+  date: string
+  max: number
+  min: number
+  weatherCode: number
+}
+
 export interface WeatherSnapshot {
   temperature: number
   feelsLike: number
@@ -8,6 +21,8 @@ export interface WeatherSnapshot {
   windSpeed: number
   high: number
   low: number
+  hourly: HourlyForecast[]
+  daily: DailyForecast[]
 }
 
 const WMO: Record<number, { en: string; am: string }> = {
@@ -42,13 +57,44 @@ export async function fetchWeather(
     'current',
     'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m',
   )
-  url.searchParams.set('daily', 'temperature_2m_max,temperature_2m_min')
+  url.searchParams.set('hourly', 'temperature_2m,weather_code')
+  url.searchParams.set('daily', 'temperature_2m_max,temperature_2m_min,weather_code')
   url.searchParams.set('timezone', 'auto')
-  url.searchParams.set('forecast_days', '1')
+  url.searchParams.set('forecast_days', '5')
 
   const res = await fetch(url)
   if (!res.ok) throw new Error('Weather request failed')
   const data = await res.json()
+
+  // Get current hour index
+  const currentHour = new Date().getHours()
+  const hourlyForecasts: HourlyForecast[] = []
+  
+  // Extract next 12 hours from current hour
+  for (let i = 0; i < 12; i++) {
+    const idx = currentHour + i
+    if (data.hourly && data.hourly.time[idx] !== undefined) {
+      hourlyForecasts.push({
+        time: data.hourly.time[idx],
+        temp: data.hourly.temperature_2m[idx],
+        weatherCode: data.hourly.weather_code[idx],
+      })
+    }
+  }
+
+  // Extract 5-day daily forecast
+  const dailyForecasts: DailyForecast[] = []
+  for (let i = 0; i < 5; i++) {
+    if (data.daily && data.daily.time[i] !== undefined) {
+      dailyForecasts.push({
+        date: data.daily.time[i],
+        max: data.daily.temperature_2m_max[i],
+        min: data.daily.temperature_2m_min[i],
+        weatherCode: data.daily.weather_code[i] ?? data.current.weather_code,
+      })
+    }
+  }
+
   return {
     temperature: data.current.temperature_2m,
     feelsLike: data.current.apparent_temperature,
@@ -57,6 +103,8 @@ export async function fetchWeather(
     windSpeed: data.current.wind_speed_10m,
     high: data.daily.temperature_2m_max[0],
     low: data.daily.temperature_2m_min[0],
+    hourly: hourlyForecasts,
+    daily: dailyForecasts,
   }
 }
 
