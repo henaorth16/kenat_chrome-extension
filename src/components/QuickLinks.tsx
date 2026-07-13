@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import './QuickLinks.css'
 
 interface BookmarkLink {
@@ -49,6 +49,26 @@ export function QuickLinks() {
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [titleInput, setTitleInput] = useState('')
   const [urlInput, setUrlInput] = useState('')
+  const formRef = useRef<HTMLFormElement>(null)
+
+  useEffect(() => {
+    if (!isAddOpen) return
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const trigger = document.querySelector('.quick-link-add-trigger')
+      if (
+        formRef.current &&
+        !formRef.current.contains(e.target as Node) &&
+        trigger &&
+        !trigger.contains(e.target as Node)
+      ) {
+        setIsAddOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isAddOpen])
 
   useEffect(() => {
     void loadLinks().then((saved) => {
@@ -194,7 +214,7 @@ export function QuickLinks() {
       </div>
 
       {isAddOpen && (
-        <form onSubmit={addLink} className="quick-links-form panel animate-in">
+        <form ref={formRef} onSubmit={addLink} className="quick-links-form panel animate-in">
           <div className="form-fields">
             <input
               className="field"

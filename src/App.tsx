@@ -9,7 +9,6 @@ import { SettingsPanel } from './components/SettingsPanel'
 import { TodoPanel } from './components/TodoPanel'
 import { WeatherChip } from './components/WeatherChip'
 import { QuickLinks } from './components/QuickLinks'
-import { QuickNotes } from './components/QuickNotes'
 import './App.css'
 
 const WALLPAPERS = [
@@ -88,7 +87,6 @@ export default function App() {
           <CalendarGrid />
           <div className="workspace-center">
             <HolidayList />
-            <QuickNotes />
           </div>
           <div className="workspace-side">
             <CountdownPanel />
