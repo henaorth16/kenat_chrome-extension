@@ -31,7 +31,24 @@ export interface AppSettings {
   weatherLocation: WeatherLocation
   notifyCountdowns: boolean
   wallpaperMode: 'solid' | 'unsplash'
+  accentColor: string
 }
+
+export interface AccentPreset {
+  name: string
+  color: string
+  soft: string
+  deep: string
+}
+
+export const ACCENT_PRESETS: AccentPreset[] = [
+  { name: 'Teal', color: '#00828a', soft: 'rgba(0, 130, 138, 0.08)', deep: '#00656b' },
+  { name: 'Blue', color: '#007aff', soft: 'rgba(0, 122, 255, 0.08)', deep: '#005ec3' },
+  { name: 'Purple', color: '#8e2de2', soft: 'rgba(142, 45, 226, 0.08)', deep: '#6f1cb0' },
+  { name: 'Orange', color: '#f2711c', soft: 'rgba(242, 113, 28, 0.08)', deep: '#ce570d' },
+  { name: 'Green', color: '#21ba45', soft: 'rgba(33, 186, 69, 0.08)', deep: '#198e33' },
+  { name: 'Rose', color: '#e03997', soft: 'rgba(224, 57, 151, 0.08)', deep: '#ba1a74' },
+]
 
 export interface TodoItem {
   id: string
@@ -79,6 +96,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   weatherLocation: DEFAULT_LOCATION,
   notifyCountdowns: true,
   wallpaperMode: 'solid',
+  accentColor: '#00828a',
 }
 
 export const SEARCH_URLS: Record<SearchEngine, (q: string) => string> = {

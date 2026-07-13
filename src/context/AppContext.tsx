@@ -19,7 +19,7 @@ import {
   saveUserEvents,
 } from '../lib/storage'
 import type { AppSettings, CountdownItem, TodoItem, UserEventItem } from '../lib/types'
-import { DEFAULT_SETTINGS, uiLang } from '../lib/types'
+import { DEFAULT_SETTINGS, uiLang, ACCENT_PRESETS } from '../lib/types'
 import { t, type Dictionary } from '../i18n'
 import { getToday } from '../lib/kenat'
 
@@ -119,6 +119,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = uiLang(settings.language)
     document.documentElement.style.colorScheme = resolvedTheme
 
+    // Dynamically apply selected Accent Color properties
+    const activeAccent = ACCENT_PRESETS.find((p) => p.color === settings.accentColor) || ACCENT_PRESETS[0]
+    document.documentElement.style.setProperty('--accent', activeAccent.color)
+    document.documentElement.style.setProperty('--accent-soft', activeAccent.soft)
+    document.documentElement.style.setProperty('--accent-deep', activeAccent.deep)
+
     const themeColor = resolvedTheme === 'dark' ? '#12141a' : '#f2f0eb'
     let meta = document.querySelector('meta[name="theme-color"]')
     if (!meta) {
@@ -131,7 +137,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Keep the document root painted so any Chrome chrome bleed matches the page.
     document.documentElement.style.backgroundColor = themeColor
     document.body.style.backgroundColor = themeColor
-  }, [resolvedTheme, settings.language])
+  }, [resolvedTheme, settings.language, settings.accentColor])
 
   const updateSettings = useCallback(
     async (patch: Partial<AppSettings>) => {

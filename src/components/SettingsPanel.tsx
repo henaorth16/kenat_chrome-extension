@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import type { LangCode, NumeralStyle, ThemeMode } from '../lib/types'
-import { uiLang } from '../lib/types'
+import { uiLang, ACCENT_PRESETS } from '../lib/types'
 import './SettingsPanel.css'
 
 export function SettingsPanel() {
@@ -106,6 +106,25 @@ export function SettingsPanel() {
               <option value="unsplash">Landscape Photo</option>
             </select>
           </label>
+
+          <div className="settings-row">
+            <span className={chromeAm ? 'ethiopic' : ''}>
+              {chromeAm ? 'የቀለም አምድ' : 'Accent Color'}
+            </span>
+            <div className="accent-color-picker">
+              {ACCENT_PRESETS.map((preset) => (
+                <button
+                  key={preset.name}
+                  type="button"
+                  className={`accent-color-dot ${settings.accentColor === preset.color ? 'is-active' : ''}`}
+                  style={{ backgroundColor: preset.color }}
+                  title={preset.name}
+                  onClick={() => void updateSettings({ accentColor: preset.color })}
+                  aria-label={`Select ${preset.name} Accent`}
+                />
+              ))}
+            </div>
+          </div>
 
           <label className="settings-check">
             <input
