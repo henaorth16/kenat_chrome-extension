@@ -180,9 +180,9 @@ export function WeatherChip() {
             </div>
             <div className="weather-detail-col">
               <div className="weather-desc-row">
-                <WeatherIcon code={weather.weatherCode} size={26} />
+                <WeatherIcon code={weather.weatherCode} size={34} />
                 <div className="weather-desc-meta">
-                  <span className="weather-loc">{settings.weatherLocation.name}</span>
+                  <span className="weather-loc">{settings.weatherLocation.name} 📍</span>
                 </div>
               </div>
             </div>
