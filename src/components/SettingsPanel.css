@@ -1,0 +1,142 @@
+.settings-wrap {
+  position: relative;
+}
+
+.settings-trigger {
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.1rem;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              box-shadow 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              background-color 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.settings-trigger:hover {
+  transform: scale(1.05);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+}
+
+.settings-trigger svg {
+  color: var(--label-secondary);
+  transition: color 150ms ease, transform 0.4s ease;
+}
+
+.settings-trigger:hover svg {
+  color: var(--accent);
+  transform: rotate(45deg);
+}
+
+/* macOS sheet style Settings Panel */
+.settings-panel {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  z-index: 30;
+  width: 260px;
+  padding: 0.95rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: var(--shadow);
+  border-radius: 18px;
+}
+
+.settings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-inner);
+  padding-bottom: 0.45rem;
+}
+
+.settings-head h2 {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--label);
+}
+
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--label-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* macOS Custom Dropdowns */
+.settings-panel select.field {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 0.65rem;
+  padding-right: 1.85rem;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.settings-check {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--label);
+  cursor: pointer;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--border-inner);
+}
+
+/* macOS checkbox style */
+.settings-check input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 5px;
+  border: 1.5px solid var(--label-secondary);
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  flex-shrink: 0;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.settings-check input[type="checkbox"]:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.settings-check input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.settings-check input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1.2px;
+  width: 3.5px;
+  height: 6px;
+  border: solid #ffffff;
+  border-width: 0 1.6px 1.6px 0;
+  transform: rotate(45deg);
+}
+
