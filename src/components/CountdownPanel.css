@@ -1,10 +1,9 @@
 .countdown-panel {
-  height: 100%;
-  min-height: 0;
+  height: fit-content;
+  max-height: 24rem;
   padding: 0.65rem 0.8rem;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   animation-delay: 120ms;
 }
 

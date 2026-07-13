@@ -51,7 +51,7 @@ export function GeezClock() {
               key={label + i}
               className={`clock-mark ethiopic ${isCardinal ? 'is-cardinal' : ''}`}
               style={{
-                transform: `rotate(${angle}deg) translateY(-3.35rem) rotate(-${angle}deg)`,
+                transform: `rotate(${angle}deg) translateY(-4.25rem) rotate(-${angle}deg)`,
               }}
             >
               {isCardinal ? label : ''}
