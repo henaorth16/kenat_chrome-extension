@@ -1,0 +1,160 @@
+.calendar {
+  width: 100%;
+  max-width: 18.5rem;
+  height: 100%;
+  max-height: 100%;
+  padding: 0.65rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-self: stretch;
+  align-self: stretch;
+  animation-delay: 80ms;
+  overflow: hidden;
+}
+
+.calendar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  margin-bottom: 0.45rem;
+  flex-shrink: 0;
+}
+
+.calendar-title {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.02rem;
+}
+
+.calendar-title h2 {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--label);
+  line-height: 1.15;
+}
+
+.calendar-title span {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--label-secondary);
+}
+
+.calendar-weekdays,
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.12rem;
+}
+
+.calendar-weekdays {
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border-inner);
+  padding-bottom: 0.15rem;
+}
+
+.calendar-weekdays div {
+  text-align: center;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--label-secondary);
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.calendar-days {
+  flex: 1;
+  align-content: start;
+}
+
+.day {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+.day:not(.empty):hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.day.empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.day-num {
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.day.is-today {
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 130, 138, 0.2);
+}
+
+[data-theme='dark'] .day.is-today {
+  box-shadow: 0 3px 8px rgba(48, 176, 184, 0.25);
+}
+
+.day.is-today:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.day.is-today .day-num {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Reverted holiday colors back to teal */
+.day.has-holiday:not(.is-today) .day-num {
+  color: var(--accent-deep);
+  font-weight: 700;
+}
+
+[data-theme='dark'] .day.has-holiday:not(.is-today) .day-num {
+  color: var(--accent);
+}
+
+.day.has-holiday:not(.is-today):hover {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+[data-theme='dark'] .day.has-holiday:not(.is-today):hover {
+  color: var(--accent);
+}
+
+.day-dot {
+  position: absolute;
+  bottom: 0.15rem;
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.day.is-today .day-dot {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.day-today-tag {
+  display: none;
+}
+
+
