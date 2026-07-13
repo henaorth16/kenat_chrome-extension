@@ -1,0 +1,27 @@
+---
+description: Apple HIG design review and improvement for Kenat New Tab UI
+globs: ["**/*.tsx", "**/*.css", "**/*.jsx"]
+---
+
+# Apple Design Skill (Chrome New Tab)
+
+When reviewing or improving UI in this project, follow Apple Human Interface Guidelines principles adapted for a desktop browser new-tab page.
+
+## Always check
+
+- Accessibility: contrast ≥ 4.5:1 for body text, click targets ≥ 24px, do not rely on color alone
+- Layout: clear hierarchy, consistent spacing, one job per section
+- Color: semantic tokens (`--label`, `--surface`, `--accent`); support light and dark
+- Typography: Outfit for Latin UI chrome; Hibur Mono for Ethiopic / Geez numerals
+- Materials: subtle blur/surfaces sparingly; keep text legible over backgrounds
+- Motion: purposeful, short; respect reduced motion when relevant
+
+## Product-specific
+
+- Calendar-first composition: clock/date + search as hero; grid and lists secondary
+- Settled neutrals with soft teal accent — not Material You dynamic color, not purple gradients
+- Bilingual EN/Amharic: Amharic strings use `.ethiopic` (Hibur Mono)
+
+## Review output
+
+Use severity: Critical / High / Medium / Low. Cite the principle and give a concrete CSS/React fix.
