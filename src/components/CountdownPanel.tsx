@@ -1,0 +1,150 @@
+import { type FormEvent, useState } from 'react'
+import { useApp } from '../context/AppContext'
+import {
+  distanceToEthiopianDate,
+  ethiopianToGregorian,
+  gregorianToEthiopian,
+  toGeez,
+} from '../lib/kenat'
+import type { CountdownItem } from '../lib/types'
+import { calLang, uiLang } from '../lib/types'
+import './CountdownPanel.css'
+
+function uid() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+export function CountdownPanel() {
+  const { countdowns, setCountdowns, dict, settings } = useApp()
+  const [open, setOpen] = useState(false)
+  const [title, setTitle] = useState('')
+  const [dateValue, setDateValue] = useState('')
+  const [notify, setNotify] = useState(true)
+  const chromeAm = uiLang(settings.language) === 'am'
+  const contentLang = calLang(settings.language)
+
+  const add = (e: FormEvent) => {
+    e.preventDefault()
+    if (!title.trim() || !dateValue) return
+    const [y, m, d] = dateValue.split('-').map(Number)
+    const eth = gregorianToEthiopian({ year: y, month: m, day: d })
+    const gregorian = ethiopianToGregorian(eth)
+    const item: CountdownItem = {
+      id: uid(),
+      title: title.trim(),
+      ethiopian: eth,
+      gregorian,
+      notify,
+      createdAt: Date.now(),
+    }
+    void setCountdowns([item, ...countdowns])
+    setTitle('')
+    setDateValue('')
+    setOpen(false)
+  }
+
+  const remove = (id: string) => {
+    void setCountdowns(countdowns.filter((c) => c.id !== id))
+  }
+
+  return (
+    <section className="countdown-panel panel animate-in">
+      <div className="countdown-head">
+        <h2 className={`panel-title ${chromeAm ? 'ethiopic' : ''}`}>
+          {dict.countdowns}
+        </h2>
+        <button
+          type="button"
+          className="btn-ghost"
+          onClick={() => setOpen((v) => !v)}
+        >
+          {dict.addCountdown}
+        </button>
+      </div>
+
+      {open && (
+        <form className="countdown-form" onSubmit={add}>
+          <input
+            className={`field ${chromeAm ? 'ethiopic' : ''}`}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder={dict.title}
+            required
+          />
+          <input
+            className="field"
+            type="date"
+            value={dateValue}
+            onChange={(e) => setDateValue(e.target.value)}
+            required
+            aria-label={dict.date}
+          />
+          <label className="notify-row">
+            <input
+              type="checkbox"
+              checked={notify}
+              onChange={(e) => setNotify(e.target.checked)}
+            />
+            <span className={chromeAm ? 'ethiopic' : ''}>{dict.notify}</span>
+          </label>
+          <div className="countdown-form-actions">
+            <button
+              type="button"
+              className="btn-ghost"
+              onClick={() => setOpen(false)}
+            >
+              {dict.cancel}
+            </button>
+            <button type="submit" className="btn-primary">
+              {dict.save}
+            </button>
+          </div>
+        </form>
+      )}
+
+      {countdowns.length === 0 ? (
+        <p className={`empty ${chromeAm ? 'ethiopic' : ''}`}>
+          {dict.emptyCountdowns}
+        </p>
+      ) : (
+        <ul className="countdown-list">
+          {countdowns.map((item) => {
+            const dist = distanceToEthiopianDate(item.ethiopian, contentLang)
+            const dateLabel =
+              settings.numeralStyle === 'geez'
+                ? `${toGeez(item.ethiopian.day)}/${toGeez(item.ethiopian.month)}/${toGeez(item.ethiopian.year)}`
+                : `${item.ethiopian.day}/${item.ethiopian.month}/${item.ethiopian.year}`
+            return (
+              <li key={item.id}>
+                <div>
+                  <strong className={chromeAm ? 'ethiopic' : ''}>
+                    {item.title}
+                  </strong>
+                  <span className="countdown-date ethiopic">{dateLabel}</span>
+                </div>
+                <div className="countdown-right">
+                  <span
+                    className={`countdown-eta ${dist.daysUntil < 0 ? 'passed' : ''} ethiopic`}
+                  >
+                    {dist.label}
+                  </span>
+                  <button
+                    type="button"
+                    className="icon-btn danger"
+                    onClick={() => remove(item.id)}
+                    aria-label={dict.delete}
+                  >
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </section>
+  )
+}
