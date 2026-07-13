@@ -188,12 +188,18 @@
   animation: fadeIn 0.2s ease;
 }
 
-.calendar-event-modal {
+.calendar-event-modal-wrapper {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1000;
+  pointer-events: none;
+}
+
+.calendar-event-modal {
+  pointer-events: auto;
   width: min(380px, 90vw);
   max-height: 80vh;
   display: flex;

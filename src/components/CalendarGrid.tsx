@@ -191,7 +191,8 @@ export function CalendarGrid() {
             className="calendar-event-modal-overlay"
             onClick={() => setSelectedDayNum(null)}
           />
-          <div className="calendar-event-modal panel animate-in">
+          <div className="calendar-event-modal-wrapper">
+            <div className="calendar-event-modal panel animate-in">
             <header className="popover-head">
               <h3>
                 {grid.monthName} {selectedDayNum}
@@ -279,7 +280,8 @@ export function CalendarGrid() {
               </div>
             </form>
           </div>
-        </>,
+        </div>
+      </>,
         document.body
       )}
     </section>
