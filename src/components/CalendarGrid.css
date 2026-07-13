@@ -180,12 +180,16 @@
   display: flex;
   flex-direction: column;
   padding: 0.65rem;
-  background: var(--surface-strong);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   border-radius: 12px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
+}
+
+[data-theme='dark'] .calendar-event-popover {
+  background: rgba(20, 21, 26, 0.99);
 }
 
 .popover-head {
@@ -260,6 +264,37 @@
 
 .event-cat-dot.important {
   background: #ff9500;
+}
+
+.event-cat-dot.holiday {
+  background: var(--accent);
+}
+
+.popover-event-row.holiday-item {
+  background: var(--accent-soft);
+  border-color: rgba(0, 130, 138, 0.15);
+}
+
+[data-theme='dark'] .popover-event-row.holiday-item {
+  background: rgba(0, 130, 138, 0.08);
+  border-color: rgba(0, 130, 138, 0.3);
+}
+
+.holiday-badge-text {
+  font-size: 0.56rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--accent-soft);
+  padding: 0.05rem 0.3rem;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .holiday-badge-text {
+  background: rgba(0, 130, 138, 0.2);
+  color: var(--accent);
 }
 
 .event-row-title {

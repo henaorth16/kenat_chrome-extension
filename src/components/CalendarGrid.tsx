@@ -54,6 +54,14 @@ export function CalendarGrid() {
     )
   }, [userEvents, year, month, selectedDayNum])
 
+  const dayHolidays = useMemo(() => {
+    if (selectedDayNum === null) return []
+    const dayObj = grid.days.find(
+      (d) => d !== null && (typeof d.ethiopian.day === 'string' ? parseInt(d.ethiopian.day, 10) : d.ethiopian.day) === selectedDayNum
+    )
+    return dayObj ? dayObj.holidays : []
+  }, [grid.days, selectedDayNum])
+
   const handleAddEvent = (e: React.FormEvent) => {
     e.preventDefault()
     if (!newEventTitle.trim() || selectedDayNum === null) return
@@ -196,32 +204,40 @@ export function CalendarGrid() {
           </header>
 
           <div className="popover-events-list">
-            {activeDayEvents.length === 0 ? (
-              <p className="no-events-text">No custom events scheduled</p>
-            ) : (
-              activeDayEvents.map((evt) => (
-                <div key={evt.id} className="popover-event-row">
-                  <span className={`event-cat-dot ${evt.category}`} />
-                  <span className="event-row-title">{evt.title}</span>
-                  <button
-                    type="button"
-                    className="icon-btn delete-btn"
-                    onClick={() => handleDeleteEvent(evt.id)}
+            {dayHolidays.map((h, hIdx) => (
+              <div key={`holiday-${hIdx}`} className="popover-event-row holiday-item">
+                <span className="event-cat-dot holiday" />
+                <span className="event-row-title ethiopic">🎉 {h.name}</span>
+                <span className="holiday-badge-text">Public Holiday</span>
+              </div>
+            ))}
+
+            {activeDayEvents.map((evt) => (
+              <div key={evt.id} className="popover-event-row">
+                <span className={`event-cat-dot ${evt.category}`} />
+                <span className="event-row-title">{evt.title}</span>
+                <button
+                  type="button"
+                  className="icon-btn delete-btn"
+                  onClick={() => handleDeleteEvent(evt.id)}
+                >
+                  <svg
+                    width="9"
+                    height="9"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
                   >
-                    <svg
-                      width="9"
-                      height="9"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                    >
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
-                  </button>
-                </div>
-              ))
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            ))}
+
+            {dayHolidays.length === 0 && activeDayEvents.length === 0 && (
+              <p className="no-events-text">No events scheduled</p>
             )}
           </div>
 
