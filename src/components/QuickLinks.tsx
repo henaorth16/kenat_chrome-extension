@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import './QuickLinks.css'
 
 interface BookmarkLink {
@@ -49,25 +50,16 @@ export function QuickLinks() {
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [titleInput, setTitleInput] = useState('')
   const [urlInput, setUrlInput] = useState('')
-  const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
     if (!isAddOpen) return
 
-    const handleClickOutside = (e: MouseEvent) => {
-      const trigger = document.querySelector('.quick-link-add-trigger')
-      if (
-        formRef.current &&
-        !formRef.current.contains(e.target as Node) &&
-        trigger &&
-        !trigger.contains(e.target as Node)
-      ) {
-        setIsAddOpen(false)
-      }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsAddOpen(false)
     }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isAddOpen])
 
   useEffect(() => {
@@ -213,43 +205,59 @@ export function QuickLinks() {
             </svg>
           </button>
           <span className="quick-link-add-label">Add</span>
-
-          {isAddOpen && (
-            <form ref={formRef} onSubmit={addLink} className="quick-links-form panel animate-in">
-              <div className="form-fields">
-                <input
-                  className="field"
-                  type="text"
-                  placeholder="Name"
-                  value={titleInput}
-                  onChange={(e) => setTitleInput(e.target.value)}
-                  required
-                  autoFocus
-                />
-                <input
-                  className="field"
-                  type="text"
-                  placeholder="URL (e.g., google.com)"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-actions">
-                <button
-                  type="button"
-                  className="btn-ghost"
-                  onClick={() => setIsAddOpen(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn-primary">
-                  Add
-                </button>
-              </div>
-            </form>
-          )}
         </div>
+
+        {isAddOpen &&
+          createPortal(
+            <div
+              className="quick-links-modal-overlay"
+              onMouseDown={(e) => {
+                if (e.target === e.currentTarget) setIsAddOpen(false)
+              }}
+            >
+              <form
+                onSubmit={addLink}
+                className="quick-links-form panel"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Add link"
+              >
+                <h3 className="quick-links-form-title">Add Link</h3>
+                <div className="form-fields">
+                  <input
+                    className="field"
+                    type="text"
+                    placeholder="Name"
+                    value={titleInput}
+                    onChange={(e) => setTitleInput(e.target.value)}
+                    required
+                    autoFocus
+                  />
+                  <input
+                    className="field"
+                    type="text"
+                    placeholder="URL (e.g., google.com)"
+                    value={urlInput}
+                    onChange={(e) => setUrlInput(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    className="btn-ghost"
+                    onClick={() => setIsAddOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn-primary">
+                    Add
+                  </button>
+                </div>
+              </form>
+            </div>,
+            document.body,
+          )}
       </div>
     </div>
   )

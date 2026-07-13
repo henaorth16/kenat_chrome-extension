@@ -5,6 +5,8 @@
 }
 
 .app-shell {
+  position: relative;
+  z-index: 1;
   height: 100dvh;
   box-sizing: border-box;
   overflow: hidden;
@@ -54,7 +56,8 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  z-index: -2;
+  /* Must be >= 0: the body's opaque background paints over negative z-index layers */
+  z-index: 0;
 }
 
 .app-wallpaper-backdrop::after {
@@ -62,7 +65,6 @@
   position: absolute;
   inset: 0;
   background: rgba(255, 255, 255, 0.15);
-  z-index: -1;
 }
 
 [data-theme='dark'] .app-wallpaper-backdrop::after {
