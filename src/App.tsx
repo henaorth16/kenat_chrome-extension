@@ -7,6 +7,7 @@ import { SearchBar } from './components/SearchBar'
 import { SettingsPanel } from './components/SettingsPanel'
 import { TodoPanel } from './components/TodoPanel'
 import { WeatherChip } from './components/WeatherChip'
+import { QuickLinks } from './components/QuickLinks'
 import './App.css'
 
 export default function App() {
@@ -27,6 +28,8 @@ export default function App() {
       </header>
 
       <SearchBar />
+
+      <QuickLinks />
 
       <section className="workspace">
         <CalendarGrid />

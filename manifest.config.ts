@@ -12,7 +12,7 @@ export default defineManifest({
     service_worker: 'src/background.ts',
     type: 'module',
   },
-  permissions: ['storage', 'alarms', 'notifications'],
+  permissions: ['storage', 'alarms', 'notifications', 'bookmarks'],
   host_permissions: [
     'https://api.open-meteo.com/*',
     'https://geocoding-api.open-meteo.com/*',
