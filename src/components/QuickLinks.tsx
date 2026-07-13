@@ -192,62 +192,64 @@ export function QuickLinks() {
           )
         })}
 
-        <button
-          type="button"
-          className="quick-link-add-trigger panel"
-          onClick={() => setIsAddOpen((o) => !o)}
-          title="Add Link"
-        >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3.2"
-            strokeLinecap="round"
+        <div className="quick-link-add-wrapper">
+          <button
+            type="button"
+            className="quick-link-add-trigger panel"
+            onClick={() => setIsAddOpen((o) => !o)}
+            title="Add Link"
           >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </button>
-      </div>
-
-      {isAddOpen && (
-        <form ref={formRef} onSubmit={addLink} className="quick-links-form panel animate-in">
-          <div className="form-fields">
-            <input
-              className="field"
-              type="text"
-              placeholder="Name"
-              value={titleInput}
-              onChange={(e) => setTitleInput(e.target.value)}
-              required
-              autoFocus
-            />
-            <input
-              className="field"
-              type="text"
-              placeholder="URL (e.g., google.com)"
-              value={urlInput}
-              onChange={(e) => setUrlInput(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-actions">
-            <button
-              type="button"
-              className="btn-ghost"
-              onClick={() => setIsAddOpen(false)}
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3.2"
+              strokeLinecap="round"
             >
-              Cancel
-            </button>
-            <button type="submit" className="btn-primary">
-              Add
-            </button>
-          </div>
-        </form>
-      )}
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+
+          {isAddOpen && (
+            <form ref={formRef} onSubmit={addLink} className="quick-links-form panel animate-in">
+              <div className="form-fields">
+                <input
+                  className="field"
+                  type="text"
+                  placeholder="Name"
+                  value={titleInput}
+                  onChange={(e) => setTitleInput(e.target.value)}
+                  required
+                  autoFocus
+                />
+                <input
+                  className="field"
+                  type="text"
+                  placeholder="URL (e.g., google.com)"
+                  value={urlInput}
+                  onChange={(e) => setUrlInput(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-ghost"
+                  onClick={() => setIsAddOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-primary">
+                  Add
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

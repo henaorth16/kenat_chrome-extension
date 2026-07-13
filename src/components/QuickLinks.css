@@ -135,14 +135,17 @@
   transform: scale(0.9);
 }
 
+.quick-link-add-wrapper {
+  position: relative;
+}
+
 /* Opaque Absolute Add Bookmark Form Sheet */
 .quick-links-form {
   position: absolute;
-  top: calc(100% + 0.35rem);
-  left: 50%;
-  transform: translateX(-50%);
+  top: calc(100% + 0.45rem);
+  right: 0;
   z-index: 210;
-  width: min(300px, 95vw);
+  width: 280px;
   padding: 0.75rem 0.9rem;
   display: flex;
   flex-direction: column;
