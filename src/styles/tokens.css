@@ -147,6 +147,9 @@ button {
 .ethiopic {
   font-family: var(--font-ethiopic);
   font-feature-settings: 'tnum' 1;
+  /* Ethiopic glyphs render smaller than Latin at the same nominal size */
+  font-size: 1.15em;
+  line-height: 1.45;
 }
 
 /* Glassmorphic Panel Core class */
