@@ -176,7 +176,7 @@
 .calendar-event-popover {
   position: absolute;
   inset: 0.45rem;
-  z-index: 100;
+  z-index: 200;
   display: flex;
   flex-direction: column;
   padding: 0.65rem;

@@ -5,6 +5,7 @@
   gap: 0.45rem;
   margin: 0.15rem auto 0.45rem;
   width: min(600px, 100%);
+  position: relative;
 }
 
 .quick-links {
@@ -134,19 +135,29 @@
   transform: scale(0.9);
 }
 
-/* Glassmorphic Add Bookmark Form Sheet */
+/* Opaque Absolute Add Bookmark Form Sheet */
 .quick-links-form {
-  width: min(340px, 95vw);
-  padding: 0.65rem 0.8rem;
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 210;
+  width: min(300px, 95vw);
+  padding: 0.75rem 0.9rem;
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
-  border-radius: 16px;
-  box-shadow: var(--shadow);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   border: 1px solid var(--border);
-  background: var(--surface);
-  backdrop-filter: blur(var(--blur));
-  -webkit-backdrop-filter: blur(var(--blur));
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+[data-theme='dark'] .quick-links-form {
+  background: rgba(18, 20, 26, 0.99);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .form-fields {
