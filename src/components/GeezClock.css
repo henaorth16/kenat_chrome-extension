@@ -10,8 +10,8 @@
 .clock-face {
   position: relative;
   flex-shrink: 0;
-  width: 10rem;
-  height: 10rem;
+  width: 12.5rem;
+  height: 12.5rem;
   border-radius: 50%;
   background: radial-gradient(circle, #ffffff 0%, #f4f4f7 100%);
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -31,7 +31,7 @@
 .clock-face::before {
   content: '';
   position: absolute;
-  inset: 0.45rem;
+  inset: 0.55rem;
   border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.03);
   pointer-events: none;
@@ -45,12 +45,12 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 1.5rem;
-  margin-left: -0.75rem;
-  margin-top: -0.5rem;
+  width: 1.8rem;
+  margin-left: -0.9rem;
+  margin-top: -0.55rem;
   text-align: center;
   line-height: 1;
-  font-size: 0.82rem;
+  font-size: 0.94rem;
   font-weight: 600;
   color: #1d1d1f;
 }
@@ -81,9 +81,9 @@
 
 /* Rounded, bold watchOS-style hands */
 .hand.hour {
-  width: 0.28rem;
-  height: 2.7rem;
-  margin-left: -0.14rem;
+  width: 0.32rem;
+  height: 3.4rem;
+  margin-left: -0.16rem;
   background: #1d1d1f;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -93,9 +93,9 @@
 }
 
 .hand.minute {
-  width: 0.18rem;
-  height: 3.6rem;
-  margin-left: -0.09rem;
+  width: 0.22rem;
+  height: 4.6rem;
+  margin-left: -0.11rem;
   background: #515154;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -106,9 +106,9 @@
 
 /* Apple's signature thin orange sweeping second hand */
 .hand.second {
-  width: 0.06rem;
-  height: 4.1rem;
-  margin-left: -0.03rem;
+  width: 0.07rem;
+  height: 5.2rem;
+  margin-left: -0.035rem;
   background: #ff453a; /* Apple System Orange/Red */
   z-index: 5;
 }
