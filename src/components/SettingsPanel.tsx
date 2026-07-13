@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useApp } from '../context/AppContext'
 import type { LangCode, NumeralStyle, ThemeMode } from '../lib/types'
 import { uiLang, ACCENT_PRESETS } from '../lib/types'
@@ -7,10 +7,31 @@ import './SettingsPanel.css'
 export function SettingsPanel() {
   const { settings, dict, updateSettings } = useApp()
   const [open, setOpen] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
   const chromeAm = uiLang(settings.language) === 'am'
 
+  useEffect(() => {
+    if (!open) return
+
+    const handleMouseDown = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+
+    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [open])
+
   return (
-    <div className="settings-wrap">
+    <div className="settings-wrap" ref={wrapRef}>
       <button
         type="button"
         className="settings-trigger icon-btn panel"
