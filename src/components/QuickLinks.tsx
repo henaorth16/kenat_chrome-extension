@@ -195,13 +195,13 @@ export function QuickLinks() {
         <div className="quick-link-add-wrapper">
           <button
             type="button"
-            className="quick-link-add-trigger panel"
+            className="quick-link-add-trigger"
             onClick={() => setIsAddOpen((o) => !o)}
             title="Add Link"
           >
             <svg
-              width="12"
-              height="12"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -212,6 +212,7 @@ export function QuickLinks() {
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
           </button>
+          <span className="quick-link-add-label">Add</span>
 
           {isAddOpen && (
             <form ref={formRef} onSubmit={addLink} className="quick-links-form panel animate-in">
