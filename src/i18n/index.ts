@@ -1,0 +1,106 @@
+import type { ContentLang, LangCode } from '../lib/types'
+import { uiLang } from '../lib/types'
+
+const en = {
+  appName: 'New Tab',
+  searchPlaceholder: 'Type here…',
+  todos: 'To-Do',
+  addTodo: 'Add a task',
+  countdowns: 'Countdowns',
+  addCountdown: 'Add',
+  upcomingHolidays: 'Upcoming holidays',
+  settings: 'Settings',
+  language: 'Language',
+  langEnglish: 'English',
+  langAmharic: 'አማርኛ',
+  langCombo: 'Combo',
+  theme: 'Theme',
+  themeSystem: 'System',
+  themeLight: 'Light',
+  themeDark: 'Dark',
+  searchEngine: 'Search engine',
+  temperature: 'Temperature',
+  numerals: 'Numerals',
+  numeralsArabic: 'Arabic',
+  numeralsGeez: 'Geez',
+  location: 'Weather location',
+  notifyCountdowns: 'Notify on countdown day',
+  feelsLike: 'Feels like',
+  humidity: 'Humidity',
+  highLow: 'H / L',
+  today: 'Today',
+  title: 'Title',
+  date: 'Date',
+  notify: 'Remind me',
+  save: 'Save',
+  cancel: 'Cancel',
+  delete: 'Delete',
+  pin: 'Pin',
+  unpin: 'Unpin',
+  emptyTodos: 'No tasks yet',
+  emptyCountdowns: 'No countdowns yet',
+  daysUntil: 'in',
+  ethiopian: 'Ethiopian',
+  gregorian: 'Gregorian',
+  searchCity: 'Search city…',
+  close: 'Close',
+}
+
+const am: typeof en = {
+  appName: 'አዲስ ትር',
+  searchPlaceholder: 'እዚህ ይፃፉ…',
+  todos: 'ተግባራት',
+  addTodo: 'ተግባር ጨምር',
+  countdowns: 'ቀነ-ቆጠራ',
+  addCountdown: 'ጨምር',
+  upcomingHolidays: 'መጪ በዓላት',
+  settings: 'ቅንብሮች',
+  language: 'ቋንቋ',
+  langEnglish: 'English',
+  langAmharic: 'አማርኛ',
+  langCombo: 'ድብልቅ',
+  theme: 'ገጽታ',
+  themeSystem: 'ስርዓት',
+  themeLight: 'ብርሃን',
+  themeDark: 'ጨለማ',
+  searchEngine: 'የፍለጋ ሞተር',
+  temperature: 'ሙቀት',
+  numerals: 'ቁጥሮች',
+  numeralsArabic: 'ዐረብኛ',
+  numeralsGeez: 'ግዕዝ',
+  location: 'የአየር አካባቢ',
+  notifyCountdowns: 'በቀነ-ቆጠራ ቀን አሳውቅ',
+  feelsLike: 'ይሰማል',
+  humidity: 'እርጥበት',
+  highLow: 'ከፍ / ዝቅ',
+  today: 'ዛሬ',
+  title: 'ርዕስ',
+  date: 'ቀን',
+  notify: 'አስታውሰኝ',
+  save: 'አስቀምጥ',
+  cancel: 'ሰርዝ',
+  delete: 'ሰርዝ',
+  pin: 'ሰካ',
+  unpin: 'አንሳ',
+  emptyTodos: 'ተግባር የለም',
+  emptyCountdowns: 'ቀነ-ቆጠራ የለም',
+  daysUntil: 'በ',
+  ethiopian: 'ኢትዮጵያዊ',
+  gregorian: 'ግሪጎሪያን',
+  searchCity: 'ከተማ ፈልግ…',
+  close: 'ዝጋ',
+}
+
+export type Dictionary = typeof en
+
+const maps: Record<ContentLang, Dictionary> = { en, am }
+
+export function t(mode: LangCode): Dictionary {
+  return maps[uiLang(mode)]
+}
+
+/** Calendar-facing labels (e.g. “today” on a day cell). */
+export function calT(mode: LangCode): Dictionary {
+  const cal: ContentLang = mode === 'en' ? 'en' : 'am'
+  return maps[cal]
+}
