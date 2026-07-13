@@ -7,7 +7,7 @@ import type { UserEventItem } from '../lib/types'
 import './CalendarGrid.css'
 
 export function CalendarGrid() {
-  const { settings, userEvents, setUserEvents } = useApp()
+  const { settings, userEvents, setUserEvents, selectedDate, setSelectedDate } = useApp()
   const today = getToday().getEthiopian()
   const [year, setYear] = useState(today.year)
   const [month, setMonth] = useState(today.month)
@@ -142,8 +142,10 @@ export function CalendarGrid() {
         {grid.days.map((day, i) => {
           if (!day) return <div key={i} className="day empty" />
 
+          const dayNum = typeof day.ethiopian.day === 'string' ? parseInt(day.ethiopian.day, 10) : day.ethiopian.day
+          const isSelected = selectedDate.year === year && selectedDate.month === month && selectedDate.day === dayNum
           const dayEvents = userEvents.filter(
-            (e) => e.year === year && e.month === month && e.day === day.ethiopian.day,
+            (e) => e.year === year && e.month === month && e.day === dayNum,
           )
           const hasUserEvents = dayEvents.length > 0
           const hasHoliday = day.holidays.length > 0
@@ -159,10 +161,15 @@ export function CalendarGrid() {
             <div
               key={i}
               className={`day ${day.isToday ? 'is-today' : ''} ${
+                isSelected ? 'is-selected' : ''
+              } ${
                 hasHoliday ? 'has-holiday' : ''
               } ${hasUserEvents ? 'has-user-event' : ''}`}
               title={title}
-              onClick={() => setSelectedDayNum(typeof day.ethiopian.day === 'string' ? parseInt(day.ethiopian.day, 10) : day.ethiopian.day)}
+              onClick={() => {
+                setSelectedDayNum(dayNum)
+                setSelectedDate({ year, month, day: dayNum })
+              }}
             >
               <span className="day-num ethiopic">{day.ethiopian.day}</span>
               {day.isToday && (

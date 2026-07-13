@@ -21,6 +21,7 @@ import {
 import type { AppSettings, CountdownItem, TodoItem, UserEventItem } from '../lib/types'
 import { DEFAULT_SETTINGS, uiLang } from '../lib/types'
 import { t, type Dictionary } from '../i18n'
+import { getToday } from '../lib/kenat'
 
 interface AppContextValue {
   ready: boolean
@@ -30,6 +31,8 @@ interface AppContextValue {
   userEvents: UserEventItem[]
   dict: Dictionary
   resolvedTheme: 'light' | 'dark'
+  selectedDate: { year: number; month: number; day: number }
+  setSelectedDate: (date: { year: number; month: number; day: number }) => void
   updateSettings: (patch: Partial<AppSettings>) => Promise<void>
   setTodos: (todos: TodoItem[]) => Promise<void>
   setCountdowns: (items: CountdownItem[]) => Promise<void>
@@ -52,6 +55,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [todos, setTodosState] = useState<TodoItem[]>([])
   const [countdowns, setCountdownsState] = useState<CountdownItem[]>([])
   const [userEvents, setUserEventsState] = useState<UserEventItem[]>([])
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = getToday().getEthiopian()
+    return { year: today.year, month: today.month, day: today.day }
+  })
   const [prefersDark, setPrefersDark] = useState(
     () => window.matchMedia('(prefers-color-scheme: dark)').matches,
   )
@@ -87,7 +94,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (isFresh) await saveSettings(next)
 
       setSettings(next)
-      setTodosState(todoList)
+      const ethToday = getToday().getEthiopian()
+      const migratedTodos = todoList.map((t) => {
+        if (t.year === undefined) {
+          return { ...t, year: ethToday.year, month: ethToday.month, day: ethToday.day }
+        }
+        return t
+      })
+      setTodosState(migratedTodos)
       setCountdownsState(countdownList)
       setUserEventsState(userEventList)
       setReady(true)
@@ -162,6 +176,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       userEvents,
       dict: t(settings.language),
       resolvedTheme,
+      selectedDate,
+      setSelectedDate,
       updateSettings,
       setTodos,
       setCountdowns,
@@ -174,6 +190,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       countdowns,
       userEvents,
       resolvedTheme,
+      selectedDate,
       updateSettings,
       setTodos,
       setCountdowns,

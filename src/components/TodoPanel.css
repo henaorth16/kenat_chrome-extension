@@ -126,22 +126,24 @@
   opacity: 0.75;
 }
 
-.todo-actions {
+.todo-item-actions {
   display: flex;
   gap: 0.1rem;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 150ms ease;
 }
 
-.todo-list li:hover .todo-actions {
+.todo-list li:hover .todo-item-actions {
   opacity: 0.85;
+  pointer-events: auto;
 }
 
-.todo-actions:hover {
+.todo-item-actions:hover {
   opacity: 1 !important;
 }
 
-.todo-actions .icon-btn {
+.todo-item-actions .icon-btn {
   width: 20px;
   height: 20px;
   min-width: 20px;
@@ -150,14 +152,48 @@
   color: var(--label-secondary);
 }
 
-.todo-actions .icon-btn:hover {
+.todo-item-actions .icon-btn:hover {
   background: var(--surface-strong);
   color: var(--accent);
 }
 
-.todo-actions .icon-btn.danger:hover {
+.todo-item-actions .icon-btn.danger:hover {
   color: var(--danger);
   background: var(--danger-soft);
+}
+
+.todo-date-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.1rem 0.45rem;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .todo-date-badge {
+  background: rgba(0, 130, 138, 0.2);
+}
+
+.todo-edit-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.edit-todo-input {
+  flex: 1;
+  font-size: 0.8rem;
+  padding: 0.15rem 0.45rem;
+}
+
+.todo-list li.editing-row {
+  background: var(--accent-soft) !important;
+  border-color: rgba(0, 130, 138, 0.15);
 }
 
 .empty {

@@ -119,6 +119,11 @@
   font-weight: 700;
 }
 
+.day.is-selected {
+  outline: 1.8px solid var(--accent);
+  outline-offset: -1.8px;
+}
+
 /* Reverted holiday colors back to teal */
 .day.has-holiday:not(.is-today) .day-num {
   color: var(--accent-deep);

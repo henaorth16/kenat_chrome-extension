@@ -39,6 +39,9 @@ export interface TodoItem {
   completed: boolean
   pinned: boolean
   createdAt: number
+  year?: number
+  month?: number
+  day?: number
 }
 
 export interface CountdownItem {
