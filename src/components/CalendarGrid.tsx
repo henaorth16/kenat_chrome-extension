@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useApp } from '../context/AppContext'
 import { createMonthGrid, getToday } from '../lib/kenat'
 import { calT } from '../i18n'
@@ -184,95 +185,102 @@ export function CalendarGrid() {
         })}
       </div>
 
-      {selectedDayNum !== null && (
-        <div className="calendar-event-popover panel animate-in">
-          <header className="popover-head">
-            <h3>
-              {grid.monthName} {selectedDayNum}
-            </h3>
-            <button
-              type="button"
-              className="icon-btn close-btn"
-              onClick={() => setSelectedDayNum(null)}
-            >
-              <svg
-                width="8"
-                height="8"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3.2"
-                strokeLinecap="round"
+      {selectedDayNum !== null && createPortal(
+        <>
+          <div
+            className="calendar-event-modal-overlay"
+            onClick={() => setSelectedDayNum(null)}
+          />
+          <div className="calendar-event-modal panel animate-in">
+            <header className="popover-head">
+              <h3>
+                {grid.monthName} {selectedDayNum}
+              </h3>
+              <button
+                type="button"
+                className="icon-btn close-btn"
+                onClick={() => setSelectedDayNum(null)}
               >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-          </header>
-
-          <div className="popover-events-list">
-            {dayHolidays.map((h, hIdx) => (
-              <div key={`holiday-${hIdx}`} className="popover-event-row holiday-item">
-                <span className="event-cat-dot holiday" />
-                <span className="event-row-title ethiopic">🎉 {h.name}</span>
-                <span className="holiday-badge-text">Public Holiday</span>
-              </div>
-            ))}
-
-            {activeDayEvents.map((evt) => (
-              <div key={evt.id} className="popover-event-row">
-                <span className={`event-cat-dot ${evt.category}`} />
-                <span className="event-row-title">{evt.title}</span>
-                <button
-                  type="button"
-                  className="icon-btn delete-btn"
-                  onClick={() => handleDeleteEvent(evt.id)}
+                <svg
+                  width="8"
+                  height="8"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3.2"
+                  strokeLinecap="round"
                 >
-                  <svg
-                    width="9"
-                    height="9"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </header>
+
+            <div className="popover-events-list">
+              {dayHolidays.map((h, hIdx) => (
+                <div key={`holiday-${hIdx}`} className="popover-event-row holiday-item">
+                  <span className="event-cat-dot holiday" />
+                  <span className="event-row-title ethiopic">🎉 {h.name}</span>
+                  <span className="holiday-badge-text">Public Holiday</span>
+                </div>
+              ))}
+
+              {activeDayEvents.map((evt) => (
+                <div key={evt.id} className="popover-event-row">
+                  <span className={`event-cat-dot ${evt.category}`} />
+                  <span className="event-row-title">{evt.title}</span>
+                  <button
+                    type="button"
+                    className="icon-btn delete-btn"
+                    onClick={() => handleDeleteEvent(evt.id)}
                   >
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                  </svg>
+                    <svg
+                      width="9"
+                      height="9"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                    >
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              ))}
+
+              {dayHolidays.length === 0 && activeDayEvents.length === 0 && (
+                <p className="no-events-text">No events scheduled</p>
+              )}
+            </div>
+
+            <form onSubmit={handleAddEvent} className="popover-add-form">
+              <input
+                type="text"
+                className="field"
+                placeholder="New Event Title"
+                value={newEventTitle}
+                onChange={(e) => setNewEventTitle(e.target.value)}
+                required
+              />
+              <div className="form-row-compact">
+                <select
+                  className="field"
+                  value={newEventCategory}
+                  onChange={(e) => setNewEventCategory(e.target.value)}
+                >
+                  <option value="personal">Personal</option>
+                  <option value="work">Work</option>
+                  <option value="important">Important</option>
+                </select>
+                <button type="submit" className="btn-primary">
+                  Add Event
                 </button>
               </div>
-            ))}
-
-            {dayHolidays.length === 0 && activeDayEvents.length === 0 && (
-              <p className="no-events-text">No events scheduled</p>
-            )}
+            </form>
           </div>
-
-          <form onSubmit={handleAddEvent} className="popover-add-form">
-            <input
-              type="text"
-              className="field"
-              placeholder="New Event Title"
-              value={newEventTitle}
-              onChange={(e) => setNewEventTitle(e.target.value)}
-              required
-            />
-            <div className="form-row-compact">
-              <select
-                className="field"
-                value={newEventCategory}
-                onChange={(e) => setNewEventCategory(e.target.value)}
-              >
-                <option value="personal">Personal</option>
-                <option value="work">Work</option>
-                <option value="important">Important</option>
-              </select>
-              <button type="submit" className="btn-primary">
-                Add
-              </button>
-            </div>
-          </form>
-        </div>
+        </>,
+        document.body
       )}
     </section>
   )
