@@ -1,0 +1,231 @@
+.weather-wrap {
+  position: relative;
+  animation-delay: 40ms;
+}
+
+.weather-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 16.5rem;
+  max-width: 20rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-radius: var(--radius);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  background: var(--surface);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              box-shadow 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              border-color 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.weather-card:hover {
+  box-shadow: var(--shadow);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-1.5px);
+}
+
+[data-theme='dark'] .weather-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.weather-temp-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+
+.weather-temp {
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: var(--label);
+  display: flex;
+  align-items: flex-start;
+}
+
+.weather-temp span {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.15rem;
+  margin-left: 0.05rem;
+  color: var(--label-secondary);
+}
+
+.weather-extremes {
+  display: flex;
+  gap: 0.45rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--label-secondary);
+  margin-left: 0.05rem;
+}
+
+.weather-detail-col {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.weather-desc-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.weather-icon-svg {
+  flex-shrink: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.weather-icon-svg.sunny {
+  filter: drop-shadow(0 2px 6px rgba(181, 124, 30, 0.25));
+}
+
+.weather-desc-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.weather-cond {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weather-loc {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--label-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.humidity-track-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.humidity-track {
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+  overflow: hidden;
+}
+
+.humidity-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+}
+
+.weather-sub {
+  margin: 0;
+  font-size: 0.64rem;
+  font-weight: 500;
+  color: var(--label-secondary);
+}
+
+.weather-loading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  animation: soft-pulse 1.2s ease infinite;
+}
+
+.weather-err {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--danger);
+}
+
+/* Apple styled city select popover */
+.weather-popover {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  z-index: 20;
+  width: 270px;
+  padding: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-shadow: var(--shadow);
+  border-radius: 18px;
+}
+
+.weather-popover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weather-popover-head strong {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.weather-results {
+  list-style: none;
+  margin: 0.15rem 0 0;
+  padding: 0;
+  max-height: 8rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.weather-results button {
+  width: 100%;
+  text-align: left;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.weather-results button:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.weather-units {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+  border-top: 1px solid var(--border-strong);
+  padding-top: 0.65rem;
+}
+
+.weather-units button {
+  flex: 1;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
