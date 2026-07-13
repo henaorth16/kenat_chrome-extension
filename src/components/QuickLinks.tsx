@@ -16,6 +16,13 @@ const MOCK_LINKS: BookmarkLink[] = [
   { title: 'Reddit', url: 'https://www.reddit.com' },
 ]
 
+function getFaviconUrl(url: string): string {
+  if (typeof chrome !== 'undefined' && chrome.runtime?.id) {
+    return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`
+  }
+  return `https://www.google.com/s2/favicons?sz=32&domain_url=${encodeURIComponent(url)}`
+}
+
 async function loadLinks(): Promise<BookmarkLink[]> {
   if (typeof chrome !== 'undefined' && chrome.storage?.local) {
     const result = await chrome.storage.local.get(STORAGE_KEY)
@@ -123,9 +130,7 @@ export function QuickLinks() {
               ? link.title.slice(0, 10) + '...'
               : link.title
 
-          const faviconUrl = `https://www.google.com/s2/favicons?sz=32&domain_url=${encodeURIComponent(
-            link.url,
-          )}`
+          const faviconUrl = getFaviconUrl(link.url)
 
           return (
             <div key={idx + '-' + link.url} className="quick-link-wrapper">
