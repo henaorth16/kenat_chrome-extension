@@ -1,73 +1,119 @@
 .clock-block {
+  padding: 0.65rem 0.85rem;
+  flex-shrink: 0;
+  animation-delay: 0ms;
+}
+
+.clock-layout {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 1.35rem;
-  text-align: left;
+  gap: 1.1rem;
   min-width: 0;
+}
+
+.clock-dial-wrap {
+  position: relative;
+  flex-shrink: 0;
+  padding: 0.35rem;
+  border-radius: 50%;
+  background: var(--surface-soft);
+  border: 1px solid var(--border-inner);
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+[data-theme='light'] .clock-dial-wrap {
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .clock-face {
   position: relative;
-  flex-shrink: 0;
-  width: 12.5rem;
-  height: 12.5rem;
+  width: 9.25rem;
+  height: 9.25rem;
   border-radius: 50%;
-  background: radial-gradient(circle, #ffffff 0%, #f4f4f7 100%);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+  background: radial-gradient(
+    circle at 35% 28%,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    transparent 70%
+  ),
+  var(--surface-strong);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-[data-theme='dark'] .clock-face {
-  background: radial-gradient(circle, #1c1d24 0%, #15161b 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+[data-theme='light'] .clock-face {
+  background: radial-gradient(
+    circle at 35% 28%,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(245, 245, 247, 0.85) 55%,
+    rgba(235, 235, 240, 0.9) 100%
+  );
 }
 
-/* Inner tick track circle */
 .clock-face::before {
   content: '';
   position: absolute;
-  inset: 0.55rem;
+  inset: 0.45rem;
   border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-inner);
   pointer-events: none;
 }
 
-[data-theme='dark'] .clock-face::before {
-  border: 1px solid rgba(255, 255, 255, 0.03);
+.clock-face::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid rgba(48, 176, 184, 0.15);
+  pointer-events: none;
+}
+
+.clock-tick {
+  position: absolute;
+  left: 50%;
+  top: 0.38rem;
+  width: 1px;
+  height: 0.28rem;
+  margin-left: -0.5px;
+  transform-origin: 50% 4.25rem;
+  background: var(--label-tertiary);
+  opacity: 0.45;
+  border-radius: 99px;
+}
+
+.clock-tick.is-major {
+  height: 0.42rem;
+  width: 1.5px;
+  margin-left: -0.75px;
+  top: 0.32rem;
+  opacity: 0.75;
+  background: var(--label-secondary);
 }
 
 .clock-mark {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 1.8rem;
-  margin-left: -0.9rem;
-  margin-top: -0.55rem;
+  width: 1.4rem;
+  margin-left: -0.7rem;
+  margin-top: -0.45rem;
   text-align: center;
   line-height: 1;
-  font-size: 0.94rem;
-  font-weight: 600;
-  color: #1d1d1f;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
 }
 
-[data-theme='dark'] .clock-mark {
-  color: #f5f5f7;
-}
-
-.clock-mark:not(.is-cardinal)::after {
-  content: '';
-  display: block;
-  width: 3.5px;
-  height: 3.5px;
-  margin: 0.2rem auto 0;
-  border-radius: 50%;
-  background: var(--label-tertiary);
-  opacity: 0.6;
+.clock-mark:not(.is-cardinal) {
+  display: none;
 }
 
 .hand {
@@ -77,52 +123,66 @@
   transform-origin: bottom center;
   border-radius: 99px;
   will-change: transform;
+  z-index: 3;
 }
 
-/* Rounded, bold watchOS-style hands */
 .hand.hour {
-  width: 0.32rem;
-  height: 3.4rem;
-  margin-left: -0.16rem;
-  background: #1d1d1f;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  width: 0.28rem;
+  height: 2.35rem;
+  margin-left: -0.14rem;
+  background: linear-gradient(to top, var(--accent) 0%, var(--label) 65%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
-[data-theme='dark'] .hand.hour {
-  background: #ffffff;
+[data-theme='light'] .hand.hour {
+  background: linear-gradient(to top, var(--accent) 0%, #1d1d1f 70%);
 }
 
 .hand.minute {
-  width: 0.22rem;
-  height: 4.6rem;
-  margin-left: -0.11rem;
-  background: #515154;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  width: 0.18rem;
+  height: 3.15rem;
+  margin-left: -0.09rem;
+  background: linear-gradient(to top, rgba(48, 176, 184, 0.5) 0%, var(--label-secondary) 60%);
+  z-index: 4;
 }
 
-[data-theme='dark'] .hand.minute {
-  background: #a1a1a6;
+[data-theme='light'] .hand.minute {
+  background: linear-gradient(to top, rgba(0, 130, 138, 0.35) 0%, #515154 65%);
 }
 
-/* Teal sweeping second hand */
 .hand.second {
-  width: 0.07rem;
-  height: 5.2rem;
-  margin-left: -0.035rem;
+  width: 0.06rem;
+  height: 3.55rem;
+  margin-left: -0.03rem;
   background: var(--accent);
   z-index: 5;
+  box-shadow: 0 0 6px rgba(48, 176, 184, 0.55);
+}
+
+.hand.second::after {
+  content: '';
+  position: absolute;
+  top: -0.18rem;
+  left: 50%;
+  width: 0.22rem;
+  height: 0.22rem;
+  margin-left: -0.11rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(48, 176, 184, 0.6);
 }
 
 .clock-center {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 0.35rem;
-  height: 0.35rem;
-  margin: -0.175rem 0 0 -0.175rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  margin: -0.21rem 0 0 -0.21rem;
   border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  background: var(--surface-strong);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 8px rgba(48, 176, 184, 0.35);
   z-index: 6;
 }
 
@@ -130,18 +190,21 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  gap: 0.12rem;
+  padding-top: 0.1rem;
 }
 
 .clock-greeting {
-  margin: 0 0 0.2rem;
-  font-size: 0.82rem;
+  margin: 0;
+  font-size: 0.74rem;
   font-weight: 600;
   color: var(--label-secondary);
+  letter-spacing: 0.01em;
 }
 
 .clock-date {
   margin: 0;
-  font-size: clamp(1.2rem, 1.9vw, 1.55rem);
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.15;
@@ -149,25 +212,66 @@
 }
 
 .clock-ethiopian {
-  margin: 0.2rem 0 0;
+  margin: 0;
   color: var(--label-secondary);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 500;
+  line-height: 1.35;
 }
 
-.clock-digital {
-  margin: 0.15rem 0 0;
+.clock-digital-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-pill);
   font-size: 0.68rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid rgba(48, 176, 184, 0.2);
   letter-spacing: 0.02em;
-  opacity: 0.85;
+}
+
+@media (max-width: 950px) {
+  .clock-block {
+    padding: 0.55rem 0.7rem;
+  }
+
+  .clock-layout {
+    gap: 0.85rem;
+  }
+
+  .clock-face {
+    width: 8.25rem;
+    height: 8.25rem;
+  }
+
+  .clock-mark {
+    font-size: 0.72rem;
+  }
+
+  .clock-tick {
+    transform-origin: 50% 3.78rem;
+  }
 }
 
 @media (max-width: 520px) {
   .clock-block {
     width: 100%;
+  }
+
+  .clock-layout {
     justify-content: center;
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .hand.second {
+    box-shadow: none;
+  }
+
+  .hand.second::after {
+    box-shadow: none;
+  }
+}
