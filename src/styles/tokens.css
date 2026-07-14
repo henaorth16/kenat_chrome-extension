@@ -151,6 +151,17 @@ button {
   line-height: 1.45;
 }
 
+/* Shared frosted glass (search bar, weather chip, etc.) */
+.glass-surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(28px) saturate(210%);
+  -webkit-backdrop-filter: blur(28px) saturate(210%);
+}
+
 /* Glassmorphic Panel Core — match search bar */
 .panel {
   background: var(--surface);

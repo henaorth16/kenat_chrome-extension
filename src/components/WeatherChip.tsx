@@ -165,34 +165,38 @@ export function WeatherChip() {
   }
 
   return (
-    <div className="weather-wrap animate-in">
+    <div className="weather-wrap">
       <button
         type="button"
-        className="weather-card panel"
+        className="weather-chip"
         onClick={() => setIsDrawerOpen(true)}
         aria-label={dict.location}
       >
         {error && (
-          <div className="weather-card-inner weather-card-state">
+          <div className="weather-chip-state">
             <span className="weather-err">{dict.location}</span>
           </div>
         )}
         {!error && !weather && (
-          <div className="weather-card-inner weather-card-state">
+          <div className="weather-chip-state">
             <span className="weather-loading">…</span>
           </div>
         )}
         {weather && temp !== null && (
-          <div className="weather-card-inner">
-            <div className="weather-icon-wrap">
-              <WeatherIcon code={weather.weatherCode} size={34} />
-            </div>
-            <div className="weather-main">
+          <>
+            <div className="weather-chip-top">
               <span className="weather-loc">
-                <IoLocationSharp size={11} aria-hidden />
+                <IoLocationSharp size={12} aria-hidden />
                 {settings.weatherLocation.name}
               </span>
-              <div className="weather-top-row">
+              <span className="weather-chip-chevron" aria-hidden>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </span>
+            </div>
+            <div className="weather-chip-mid">
+              <div className="weather-temp-block">
                 <strong className="weather-temp">
                   {temp}
                   <span>{unit}</span>
@@ -201,12 +205,20 @@ export function WeatherChip() {
                   {weatherLabel(weather.weatherCode, chromeLang)}
                 </span>
               </div>
-              <div className="weather-extremes">
-                <span className="weather-pill">H {high}°</span>
-                <span className="weather-pill">L {low}°</span>
+              <div className="weather-icon-wrap" aria-hidden>
+                <WeatherIcon code={weather.weatherCode} size={36} />
               </div>
             </div>
-          </div>
+            <div className="weather-extremes">
+              <span>
+                H <em>{high}°</em>
+              </span>
+              <span className="weather-ext-sep" aria-hidden />
+              <span>
+                L <em>{low}°</em>
+              </span>
+            </div>
+          </>
         )}
       </button>
 

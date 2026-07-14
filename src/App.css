@@ -80,10 +80,12 @@
   content: '';
   position: absolute;
   inset: 0;
+  /* Lighter at top so weather glass can frost the wallpaper */
   background: linear-gradient(
     180deg,
-    rgba(8, 10, 14, 0.55) 0%,
-    rgba(8, 10, 14, 0.72) 100%
+    rgba(8, 10, 14, 0.28) 0%,
+    rgba(8, 10, 14, 0.48) 35%,
+    rgba(8, 10, 14, 0.7) 100%
   );
 }
 
