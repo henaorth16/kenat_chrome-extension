@@ -16,8 +16,10 @@ export default defineManifest({
   host_permissions: [
     'https://api.open-meteo.com/*',
     'https://geocoding-api.open-meteo.com/*',
-    'https://api.quotable.io/*',
-    'https://zenquotes.io/*',
+    'https://dummyjson.com/*',
+    'https://suggestqueries.google.com/*',
+    'https://duckduckgo.com/*',
+    'https://api.bing.com/*',
     'https://images.unsplash.com/*',
     'https://*/*',
     'http://*/*',
