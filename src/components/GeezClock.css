@@ -104,17 +104,13 @@
   background: #a1a1a6;
 }
 
-/* Apple's signature thin orange sweeping second hand */
+/* Teal sweeping second hand */
 .hand.second {
   width: 0.07rem;
   height: 5.2rem;
   margin-left: -0.035rem;
-  background: #ff453a; /* Apple System Orange/Red */
+  background: var(--accent);
   z-index: 5;
-}
-
-[data-theme='dark'] .hand.second {
-  background: #ff453a;
 }
 
 .clock-center {
@@ -125,7 +121,7 @@
   height: 0.35rem;
   margin: -0.175rem 0 0 -0.175rem;
   border-radius: 50%;
-  background: #ff453a;
+  background: var(--accent);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   z-index: 6;
 }
@@ -136,29 +132,36 @@
   flex-direction: column;
 }
 
-.clock-digital {
-  margin: 0 0 0.15rem;
-  font-size: 0.76rem;
+.clock-greeting {
+  margin: 0 0 0.2rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  color: var(--label-secondary);
 }
 
 .clock-date {
   margin: 0;
-  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  font-size: clamp(1.2rem, 1.9vw, 1.55rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.15;
   color: var(--label);
 }
 
-.clock-gregorian {
-  margin: 0.25rem 0 0;
+.clock-ethiopian {
+  margin: 0.2rem 0 0;
   color: var(--label-secondary);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 500;
+}
+
+.clock-digital {
+  margin: 0.15rem 0 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  opacity: 0.85;
 }
 
 @media (max-width: 520px) {

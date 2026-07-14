@@ -1,18 +1,10 @@
 import { type FormEvent, useState } from 'react'
 import { useApp } from '../context/AppContext'
-import type { SearchEngine } from '../lib/types'
 import { SEARCH_URLS, uiLang } from '../lib/types'
 import './SearchBar.css'
 
-const ENGINES: { id: SearchEngine; label: string }[] = [
-  { id: 'google', label: 'Google' },
-  { id: 'duckduckgo', label: 'DuckDuckGo' },
-  { id: 'bing', label: 'Bing' },
-  { id: 'youtube', label: 'YouTube' },
-]
-
 export function SearchBar() {
-  const { settings, dict, updateSettings } = useApp()
+  const { settings, dict } = useApp()
   const [query, setQuery] = useState('')
   const chromeAm = uiLang(settings.language) === 'am'
 
@@ -20,6 +12,13 @@ export function SearchBar() {
     e.preventDefault()
     const q = query.trim()
     if (!q) return
+
+    if (/^https?:\/\//i.test(q) || /^[\w-]+(\.[\w-]+)+/.test(q)) {
+      const url = /^https?:\/\//i.test(q) ? q : `https://${q}`
+      window.location.href = url
+      return
+    }
+
     window.location.href = SEARCH_URLS[settings.searchEngine](q)
   }
 
@@ -51,27 +50,12 @@ export function SearchBar() {
           aria-label={dict.searchPlaceholder}
           autoFocus
         />
-        <button type="submit" className="search-submit">
-          Search
+        <button type="submit" className="search-submit" aria-label="Search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
         </button>
-      </div>
-      <div
-        className="search-engines"
-        role="radiogroup"
-        aria-label={dict.searchEngine}
-      >
-        {ENGINES.map((engine) => (
-          <button
-            key={engine.id}
-            type="button"
-            role="radio"
-            aria-checked={settings.searchEngine === engine.id}
-            className={`engine-chip ${settings.searchEngine === engine.id ? 'is-active' : ''}`}
-            onClick={() => void updateSettings({ searchEngine: engine.id })}
-          >
-            {engine.label}
-          </button>
-        ))}
       </div>
     </form>
   )

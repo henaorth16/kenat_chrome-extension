@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { AppProvider } from './context/AppContext'
 import App from './App'
 import './styles/tokens.css'
+import './styles/widget-panels.css'
 
 document.title = ''
 

@@ -75,6 +75,43 @@ export function createMonthGrid(options: {
   })
 }
 
+export function getHolidaysInMonth(
+  year: number,
+  month: number,
+  holidayLang: ContentLang = 'en',
+  distanceLang: ContentLang = 'en',
+): Array<Holiday & { daysUntil: number; distanceLabel: string }> {
+  const today = getToday()
+  const holidayKenatLang = toKenatLang(holidayLang)
+  const distanceKenatLang = toKenatLang(distanceLang)
+
+  return getHolidaysForYear(year, { lang: holidayKenatLang })
+    .filter((h) => h.ethiopian.month === month)
+    .map((h) => {
+      const target = new Kenat(
+        `${h.ethiopian.year}/${h.ethiopian.month}/${h.ethiopian.day}`,
+      )
+      const breakdown = today.distanceTo(target, {
+        units: ['days'],
+        output: 'object',
+        lang: distanceKenatLang,
+      }) as DiffBreakdown
+      return {
+        ...h,
+        daysUntil: breakdown.totalDays * breakdown.sign,
+        distanceLabel:
+          breakdown.sign < 0
+            ? ''
+            : (Kenat.formatDistance(breakdown, {
+                units: ['days'],
+                lang: distanceKenatLang,
+              }) as string),
+      }
+    })
+    .filter((h) => h.daysUntil >= 0)
+    .sort((a, b) => a.daysUntil - b.daysUntil)
+}
+
 export function getUpcomingHolidays(
   limit = 5,
   holidayLang: ContentLang = 'en',
@@ -126,6 +163,26 @@ export function getUpcomingHolidays(
   return unique
 }
 
+function compactDistanceUnits(
+  breakdown: DiffBreakdown,
+): Array<'years' | 'months' | 'days'> {
+  const units: Array<'years' | 'months' | 'days'> = []
+  if (breakdown.years) units.push('years')
+  if (breakdown.months) units.push('months')
+  if (breakdown.days || units.length === 0) units.push('days')
+  return units
+}
+
+function formatCompactDistance(
+  breakdown: DiffBreakdown,
+  lang: ReturnType<typeof toKenatLang>,
+): string {
+  return Kenat.formatDistance(breakdown, {
+    units: compactDistanceUnits(breakdown),
+    lang,
+  }) as string
+}
+
 export function distanceToEthiopianDate(
   target: EthiopianDate,
   lang: ContentLang,
@@ -150,10 +207,7 @@ export function distanceToEthiopianDate(
           ? lang === 'am'
             ? 'ያለፈ'
             : 'Passed'
-          : (Kenat.formatDistance(breakdown, {
-              units: ['years', 'months', 'days'],
-              lang: kenatLang,
-            }) as string),
+          : formatCompactDistance(breakdown, kenatLang),
   }
 }
 

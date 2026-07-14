@@ -48,8 +48,8 @@ export function CountdownPanel() {
   }
 
   return (
-    <section className="countdown-panel panel animate-in">
-      <div className="countdown-head">
+    <section className="countdown-panel widget-panel panel animate-in">
+      <header className="widget-head">
         <div className="panel-header-clean">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
@@ -59,12 +59,12 @@ export function CountdownPanel() {
         </div>
         <button
           type="button"
-          className="btn-ghost"
+          className="widget-action-btn"
           onClick={() => setOpen((v) => !v)}
         >
           {dict.addCountdown}
         </button>
-      </div>
+      </header>
 
       {open && (
         <form className="countdown-form" onSubmit={add}>
@@ -107,11 +107,11 @@ export function CountdownPanel() {
       )}
 
       {countdowns.length === 0 ? (
-        <p className={`empty ${chromeAm ? 'ethiopic' : ''}`}>
+        <p className={`widget-empty ${chromeAm ? 'ethiopic' : ''}`}>
           {dict.emptyCountdowns}
         </p>
       ) : (
-        <ul className="countdown-list">
+        <ul className="countdown-list widget-list">
           {countdowns.map((item) => {
             const dist = distanceToEthiopianDate(item.ethiopian, contentLang)
             const dateLabel =
@@ -119,7 +119,7 @@ export function CountdownPanel() {
                 ? `${toGeez(item.ethiopian.day)}/${toGeez(item.ethiopian.month)}/${toGeez(item.ethiopian.year)}`
                 : `${item.ethiopian.day}/${item.ethiopian.month}/${item.ethiopian.year}`
             return (
-              <li key={item.id}>
+              <li key={item.id} className="widget-row countdown-row">
                 <div>
                   <strong className={chromeAm ? 'ethiopic' : ''}>
                     {item.title}

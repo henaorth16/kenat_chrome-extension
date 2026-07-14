@@ -21,6 +21,9 @@ export function TodoPanel() {
     (t) => t.year === selectedDate.year && t.month === selectedDate.month && t.day === selectedDate.day
   )
 
+  const completedCount = todos.filter((t) => t.completed).length
+  const totalCount = todos.length
+
   const sorted = [...currentTodos].sort((a, b) => {
     if (a.pinned !== b.pinned) return a.pinned ? -1 : 1
     if (a.completed !== b.completed) return a.completed ? 1 : -1
@@ -65,19 +68,19 @@ export function TodoPanel() {
   }
 
   return (
-    <section className="todo-panel panel animate-in">
-      <div className="panel-header-clean">
-        <div className="panel-title-left">
+    <section className="todo-panel widget-panel panel animate-in">
+      <header className="widget-head">
+        <div className="panel-header-clean">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
           <span className={chromeAm ? 'ethiopic' : ''}>{dict.todos}</span>
         </div>
-        <span className="todo-date-badge">
-          {selectedDate.day}/{selectedDate.month}
+        <span className="widget-badge">
+          {completedCount} / {totalCount}
         </span>
-      </div>
+      </header>
 
       <form className="todo-form" onSubmit={add}>
         <input
@@ -93,11 +96,11 @@ export function TodoPanel() {
       </form>
 
       {sorted.length === 0 ? (
-        <p className={`empty ${chromeAm ? 'ethiopic' : ''}`}>{dict.emptyTodos}</p>
+        <p className={`widget-empty ${chromeAm ? 'ethiopic' : ''}`}>{dict.emptyTodos}</p>
       ) : (
-        <ul className="todo-list">
+        <ul className="todo-list widget-list">
           {sorted.map((item) => (
-            <li key={item.id} className={`${item.completed ? 'done' : ''} ${item.id === editingId ? 'editing-row' : ''}`}>
+            <li key={item.id} className={`widget-row todo-row ${item.completed ? 'done' : ''} ${item.id === editingId ? 'editing-row' : ''}`}>
               {item.id === editingId ? (
                 <div className="todo-edit-wrap">
                   <input

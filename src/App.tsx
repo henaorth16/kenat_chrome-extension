@@ -1,99 +1,94 @@
-import { useEffect } from 'react'
-import { useApp } from './context/AppContext'
-import { CalendarGrid } from './components/CalendarGrid'
-import { CountdownPanel } from './components/CountdownPanel'
+import { useState } from 'react'
+import { AppProvider, useApp } from './context/AppContext'
 import { GeezClock } from './components/GeezClock'
-import { HolidayList } from './components/HolidayList'
 import { SearchBar } from './components/SearchBar'
-import { SettingsPanel } from './components/SettingsPanel'
-import { TodoPanel } from './components/TodoPanel'
-import { WeatherChip } from './components/WeatherChip'
 import { QuickLinks } from './components/QuickLinks'
+import { WeatherChip } from './components/WeatherChip'
+import { CalendarGrid } from './components/CalendarGrid'
+import { AgendaPanel } from './components/AgendaPanel'
+import { CountdownPanel } from './components/CountdownPanel'
+import { TodoPanel } from './components/TodoPanel'
+import { QuoteWidget } from './components/QuoteWidget'
+import { BottomDock } from './components/BottomDock'
+import { SettingsPanel } from './components/SettingsPanel'
+import { getToday } from './lib/kenat'
 import './App.css'
 
 const WALLPAPERS = [
-  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80', // Tropical Beach
-  'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80', // Misty Forest
-  'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1920&q=80', // Mountain Sunset
-  'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1920&q=80', // Forest Walkway
-  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80', // Grassy Mountain Valley
-  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80', // Yosemite Valley
-  'https://images.unsplash.com/photo-1433832597046-4f10e10ac764?auto=format&fit=crop&w=1920&q=80', // Sand Dunes Sunrise
-  'https://images.unsplash.com/photo-1472214222541-d510753a4907?auto=format&fit=crop&w=1920&q=80', // Green Hills
-  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80', // Volcanic Lake
-  'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=1920&q=80', // Ocean Sunset
+  'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=2400&q=80',
+  'https://images.unsplash.com/photo-1483347756197-71ef80e95f73?auto=format&fit=crop&w=2400&q=80',
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=80',
 ]
 
-export default function App() {
+function pickWallpaper(): string {
+  const dayIndex = Math.floor(Date.now() / 86_400_000) % WALLPAPERS.length
+  return WALLPAPERS[dayIndex]
+}
+
+function Dashboard() {
   const { ready, settings } = useApp()
-
-  useEffect(() => {
-    if (!ready) return
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const activeEl = document.activeElement
-      const isInputFocused =
-        activeEl &&
-        (activeEl.tagName === 'INPUT' ||
-          activeEl.tagName === 'TEXTAREA' ||
-          activeEl.getAttribute('contenteditable') === 'true')
-
-      if (isInputFocused) return
-
-      if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
-        e.preventDefault()
-        const searchInput = document.getElementById('search-input') as HTMLInputElement | null
-        if (searchInput) {
-          searchInput.focus()
-          searchInput.select()
-        }
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [ready])
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const ethToday = getToday().getEthiopian()
+  const [viewMonth, setViewMonth] = useState({
+    year: ethToday.year,
+    month: ethToday.month,
+  })
 
   if (!ready) {
     return <div className="boot" aria-busy="true" />
   }
 
-  const dayOfMonth = new Date().getDate()
-  const wallpaperUrl = WALLPAPERS[dayOfMonth % WALLPAPERS.length]
+  const wallpaperUrl =
+    settings.wallpaperMode === 'unsplash' ? pickWallpaper() : undefined
 
   return (
-    <div className={`app-container ${settings.wallpaperMode === 'unsplash' ? 'has-wallpaper' : ''}`}>
-      {settings.wallpaperMode === 'unsplash' && (
+    <div className="app-container">
+      {wallpaperUrl && (
         <div
           className="app-wallpaper-backdrop"
           style={{ backgroundImage: `url(${wallpaperUrl})` }}
+          aria-hidden
         />
       )}
-      
       <div className="app-shell">
         <header className="top-band">
           <GeezClock />
-          <div className="top-band-end">
-            <WeatherChip />
-            <SettingsPanel />
-          </div>
+          <WeatherChip />
         </header>
 
-        <SearchBar />
+        <section className="hero-band">
+          <SearchBar />
+          <QuickLinks />
+        </section>
 
-        <QuickLinks />
-
-        <section className="workspace">
-          <CalendarGrid />
-          <div className="workspace-center">
-            <HolidayList />
-          </div>
-          <div className="workspace-side">
+        <section className="bottom-zone">
+          <div className="bottom-widgets">
+            <CalendarGrid
+              year={viewMonth.year}
+              month={viewMonth.month}
+              onMonthChange={setViewMonth}
+            />
+            <AgendaPanel year={viewMonth.year} month={viewMonth.month} />
             <CountdownPanel />
             <TodoPanel />
           </div>
+
+          <footer className="app-footer">
+            <QuoteWidget />
+            <BottomDock onOpenSettings={() => setSettingsOpen(true)} />
+          </footer>
         </section>
       </div>
+
+      <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <AppProvider>
+      <Dashboard />
+    </AppProvider>
   )
 }

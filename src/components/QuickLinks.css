@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.45rem;
-  margin: 0.25rem auto 0.65rem;
-  width: min(600px, 100%);
+  gap: 0.35rem;
+  margin: 0;
+  width: min(640px, 100%);
   position: relative;
 }
 

@@ -2,17 +2,20 @@ import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { LuSparkles } from 'react-icons/lu'
 import { useApp } from '../context/AppContext'
-import { createMonthGrid, getToday } from '../lib/kenat'
+import { createMonthGrid } from '../lib/kenat'
 import { calT } from '../i18n'
 import { calLang } from '../lib/types'
 import type { UserEventItem } from '../lib/types'
 import './CalendarGrid.css'
 
-export function CalendarGrid() {
+interface CalendarGridProps {
+  year: number
+  month: number
+  onMonthChange: (next: { year: number; month: number }) => void
+}
+
+export function CalendarGrid({ year, month, onMonthChange }: CalendarGridProps) {
   const { settings, userEvents, setUserEvents, selectedDate, setSelectedDate } = useApp()
-  const today = getToday().getEthiopian()
-  const [year, setYear] = useState(today.year)
-  const [month, setMonth] = useState(today.month)
   const [selectedDayNum, setSelectedDayNum] = useState<number | null>(null)
   
   const [newEventTitle, setNewEventTitle] = useState('')
@@ -43,9 +46,8 @@ export function CalendarGrid() {
       m = 1
       y += 1
     }
-    setMonth(m)
-    setYear(y)
-    setSelectedDayNum(null) // Close popover when month changes
+    onMonthChange({ year: y, month: m })
+    setSelectedDayNum(null)
   }
 
   // Fetch events for active selected day
@@ -87,11 +89,11 @@ export function CalendarGrid() {
   }
 
   return (
-    <section className="calendar panel animate-in">
+    <section className="calendar widget-panel panel animate-in">
       <header className="calendar-head">
         <button
           type="button"
-          className="icon-btn"
+          className="cal-nav-btn"
           onClick={() => go(-1)}
           aria-label="Previous month"
         >
@@ -114,7 +116,7 @@ export function CalendarGrid() {
         </div>
         <button
           type="button"
-          className="icon-btn"
+          className="cal-nav-btn"
           onClick={() => go(1)}
           aria-label="Next month"
         >
@@ -132,15 +134,17 @@ export function CalendarGrid() {
           </svg>
         </button>
       </header>
-      <div className="calendar-weekdays">
-        {grid.headers.map((h) => (
-          <div key={h} className="ethiopic">
-            {h}
-          </div>
-        ))}
-      </div>
 
-      <div className="calendar-days">
+      <div className="calendar-body">
+        <div className="calendar-weekdays">
+          {grid.headers.map((h) => (
+            <div key={h} className="ethiopic">
+              {h}
+            </div>
+          ))}
+        </div>
+
+        <div className="calendar-days">
         {grid.days.map((day, i) => {
           if (!day) return <div key={i} className="day empty" />
 
@@ -184,6 +188,7 @@ export function CalendarGrid() {
             </div>
           )
         })}
+        </div>
       </div>
 
       {selectedDayNum !== null && createPortal(

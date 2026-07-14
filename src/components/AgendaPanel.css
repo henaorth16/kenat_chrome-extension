@@ -1,0 +1,114 @@
+.agenda-panel {
+  width: 100%;
+  min-width: 0;
+  height: fit-content;
+  max-height: 13.5rem;
+  animation-delay: 100ms;
+}
+
+.agenda-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.4rem;
+  flex-shrink: 0;
+}
+
+.agenda-add-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.35rem;
+}
+
+.agenda-add-row .btn-primary {
+  min-height: 30px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.76rem;
+}
+
+.agenda-row {
+  padding-left: 0.35rem;
+}
+
+.agenda-row:hover {
+  background: var(--accent-soft);
+}
+
+.event-pill {
+  width: 3px;
+  height: 1.5rem;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+.event-pill.is-today {
+  box-shadow: 0 0 6px currentColor;
+}
+
+.event-pill.cat-public { background: var(--accent); }
+.event-pill.cat-christian { background: #f5a623; }
+.event-pill.cat-muslim { background: #34c759; }
+.event-pill.cat-religious { background: #af52de; }
+.event-pill.cat-other { background: #8e8e93; }
+.event-pill.cat-personal { background: #5ac8fa; }
+.event-pill.cat-work { background: #ff9500; }
+.event-pill.cat-important { background: #ff3b30; }
+
+.agenda-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.04rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.agenda-main strong {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agenda-date {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--label-secondary);
+}
+
+.agenda-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.agenda-eta {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(48, 176, 184, 0.14);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.agenda-row:has(.event-pill.is-today) .agenda-eta {
+  color: var(--gold);
+  background: var(--gold-soft);
+}
+
+.agenda-actions .delete-btn {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.agenda-row:hover .delete-btn {
+  opacity: 0.85;
+}

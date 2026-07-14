@@ -16,6 +16,9 @@ export default defineManifest({
   host_permissions: [
     'https://api.open-meteo.com/*',
     'https://geocoding-api.open-meteo.com/*',
+    'https://api.quotable.io/*',
+    'https://zenquotes.io/*',
+    'https://images.unsplash.com/*',
   ],
   icons: {
     '16': 'icons/icon16.png',

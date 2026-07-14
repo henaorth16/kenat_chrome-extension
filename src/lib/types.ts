@@ -89,14 +89,14 @@ export const DEFAULT_LOCATION: WeatherLocation = {
 
 export const DEFAULT_SETTINGS: AppSettings = {
   language: 'combo',
-  theme: 'system',
+  theme: 'dark',
   searchEngine: 'google',
   tempUnit: 'celsius',
   numeralStyle: 'arabic',
   weatherLocation: DEFAULT_LOCATION,
   notifyCountdowns: true,
-  wallpaperMode: 'solid',
-  accentColor: '#00828a',
+  wallpaperMode: 'unsplash',
+  accentColor: '#30b0b8',
 }
 
 export const SEARCH_URLS: Record<SearchEngine, (q: string) => string> = {

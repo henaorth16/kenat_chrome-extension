@@ -1,0 +1,39 @@
+.bottom-dock {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  animation-delay: 200ms;
+}
+
+.dock-btn {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--label-secondary);
+  padding: 0;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dock-btn:hover {
+  transform: translateY(-2px) scale(1.06);
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.dock-btn.is-active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.dock-btn svg {
+  flex-shrink: 0;
+}
