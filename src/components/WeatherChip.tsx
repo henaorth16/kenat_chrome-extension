@@ -49,8 +49,11 @@ function WeatherIcon({ code, size = 32 }: { code: number; size?: number }) {
       </svg>
     )
   }
-  // Rain / Drizzle / Showers
-  if (code === 51 || code === 61 || code === 63 || code === 65 || code === 80) {
+  // Drizzle / Rain / Showers (WMO 51–67, 80–82)
+  if (
+    (code >= 51 && code <= 67) ||
+    (code >= 80 && code <= 82)
+  ) {
     return (
       <svg className="weather-icon-svg rainy" viewBox="0 0 24 24" width={size} height={size}>
         <path d="M19.5 13a3.5 3.5 0 0 0-3.5-3.5h-.5A5.5 5.5 0 0 0 6 11a4.5 4.5 0 0 0 1.5 8.8h12a3.5 3.5 0 0 0 0-6.8z" fill="none" stroke="var(--label)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -58,8 +61,8 @@ function WeatherIcon({ code, size = 32 }: { code: number; size?: number }) {
       </svg>
     )
   }
-  // Snow
-  if (code === 71) {
+  // Snow / snow showers (WMO 71–77, 85–86)
+  if ((code >= 71 && code <= 77) || code === 85 || code === 86) {
     return (
       <svg className="weather-icon-svg snowy" viewBox="0 0 24 24" width={size} height={size} stroke="var(--label)" strokeWidth="1.8" strokeLinecap="round">
         <path d="M19.5 13a3.5 3.5 0 0 0-3.5-3.5h-.5A5.5 5.5 0 0 0 6 11a4.5 4.5 0 0 0 1.5 8.8h12a3.5 3.5 0 0 0 0-6.8z" fill="none" strokeLinejoin="round" />
@@ -67,8 +70,8 @@ function WeatherIcon({ code, size = 32 }: { code: number; size?: number }) {
       </svg>
     )
   }
-  // Thunderstorm
-  if (code === 95) {
+  // Thunderstorm (WMO 95–99)
+  if (code >= 95 && code <= 99) {
     return (
       <svg className="weather-icon-svg thunderstorm" viewBox="0 0 24 24" width={size} height={size}>
         <path d="M19.5 13a3.5 3.5 0 0 0-3.5-3.5h-.5A5.5 5.5 0 0 0 6 11a4.5 4.5 0 0 0 1.5 8.8h12a3.5 3.5 0 0 0 0-6.8z" fill="none" stroke="var(--label)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -76,9 +79,10 @@ function WeatherIcon({ code, size = 32 }: { code: number; size?: number }) {
       </svg>
     )
   }
+  // Fallback: cloudy (instead of empty circle)
   return (
-    <svg className="weather-icon-svg fallback" viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="var(--label-secondary)" strokeWidth="1.8">
-      <circle cx="12" cy="12" r="8" />
+    <svg className="weather-icon-svg cloudy" viewBox="0 0 24 24" width={size} height={size}>
+      <path d="M19.5 15a3 3 0 0 0-3-3H16a5 5 0 0 0-9.5-2A4 4 0 0 0 3 14a4 4 0 0 0 4 4h9.5a3 3 0 0 0 3-3z" fill="none" stroke="var(--label)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

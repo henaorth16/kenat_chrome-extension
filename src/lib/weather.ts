@@ -33,16 +33,42 @@ const WMO: Record<number, { en: string; am: string }> = {
   45: { en: 'Fog', am: 'ጭጋግ' },
   48: { en: 'Rime fog', am: 'ጭጋግ' },
   51: { en: 'Light drizzle', am: 'ቀላል ርጥበት' },
-  61: { en: 'Rain', am: 'ዝናብ' },
+  53: { en: 'Drizzle', am: 'ርጥበት' },
+  55: { en: 'Dense drizzle', am: 'ከባድ ርጥበት' },
+  56: { en: 'Freezing drizzle', am: 'ቀዝቃዛ ርጥበት' },
+  57: { en: 'Freezing drizzle', am: 'ቀዝቃዛ ርጥበት' },
+  61: { en: 'Light rain', am: 'ቀላል ዝናብ' },
   63: { en: 'Rain', am: 'ዝናብ' },
   65: { en: 'Heavy rain', am: 'ከባድ ዝናብ' },
-  71: { en: 'Snow', am: 'በረዶ' },
-  80: { en: 'Showers', am: 'ዝናብ ገላ' },
+  66: { en: 'Freezing rain', am: 'ቀዝቃዛ ዝናብ' },
+  67: { en: 'Freezing rain', am: 'ቀዝቃዛ ዝናብ' },
+  71: { en: 'Light snow', am: 'ቀላል በረዶ' },
+  73: { en: 'Snow', am: 'በረዶ' },
+  75: { en: 'Heavy snow', am: 'ከባድ በረዶ' },
+  77: { en: 'Snow grains', am: 'በረዶ' },
+  80: { en: 'Light showers', am: 'ቀላል ዝናብ ገላ' },
+  81: { en: 'Showers', am: 'ዝናብ ገላ' },
+  82: { en: 'Heavy showers', am: 'ከባድ ዝናብ ገላ' },
+  85: { en: 'Snow showers', am: 'የበረዶ ዝናብ' },
+  86: { en: 'Heavy snow showers', am: 'ከባድ የበረዶ ዝናብ' },
   95: { en: 'Thunderstorm', am: 'ነጎድጓድ' },
+  96: { en: 'Thunderstorm', am: 'ነጎድጓድ' },
+  99: { en: 'Thunderstorm', am: 'ነጎድጓድ' },
+}
+
+function resolveWmoEntry(code: number): { en: string; am: string } | undefined {
+  if (WMO[code]) return WMO[code]
+  if (code >= 51 && code <= 57) return WMO[51]
+  if (code >= 61 && code <= 67) return WMO[61]
+  if (code >= 71 && code <= 77) return WMO[71]
+  if (code >= 80 && code <= 82) return WMO[80]
+  if (code === 85 || code === 86) return WMO[85]
+  if (code >= 95 && code <= 99) return WMO[95]
+  return undefined
 }
 
 export function weatherLabel(code: number, lang: 'en' | 'am'): string {
-  const entry = WMO[code] ?? WMO[Math.floor(code / 10) * 10]
+  const entry = resolveWmoEntry(code)
   if (!entry) return lang === 'am' ? 'አየር' : 'Weather'
   return lang === 'am' ? entry.am : entry.en
 }
