@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fetchRandomQuote, type Quote } from '../lib/quotes'
 import { useApp } from '../context/AppContext'
-import { uiLang } from '../lib/types'
 import './QuoteWidget.css'
 
 export function QuoteWidget() {
-  const { settings } = useApp()
-  const chromeAm = uiLang(settings.language) === 'am'
+  const { dict } = useApp()
   const [quote, setQuote] = useState<Quote | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -26,8 +24,8 @@ export function QuoteWidget() {
       type="button"
       className="quote-widget animate-in"
       onClick={() => void loadQuote()}
-      title={chromeAm ? 'አዲስ ጥቅስ ጫን' : 'Tap for a new quote'}
-      aria-label={chromeAm ? 'Motivational quote' : 'Motivational quote'}
+      title={dict.newQuote}
+      aria-label={dict.quoteLabel}
     >
       <svg
         className="quote-icon"

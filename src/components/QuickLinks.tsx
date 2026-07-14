@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useApp } from '../context/AppContext'
 import './QuickLinks.css'
 
 interface BookmarkLink {
@@ -46,6 +47,7 @@ async function saveLinks(links: BookmarkLink[]): Promise<void> {
 }
 
 export function QuickLinks() {
+  const { dict } = useApp()
   const [links, setLinks] = useState<BookmarkLink[]>([])
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [titleInput, setTitleInput] = useState('')
@@ -189,7 +191,7 @@ export function QuickLinks() {
             type="button"
             className="quick-link-add-trigger"
             onClick={() => setIsAddOpen((o) => !o)}
-            title="Add Link"
+            title={dict.addLink}
           >
             <svg
               width="14"
@@ -204,7 +206,7 @@ export function QuickLinks() {
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
           </button>
-          <span className="quick-link-add-label">Add</span>
+          <span className="quick-link-add-label">{dict.addLinkShort}</span>
         </div>
 
         {isAddOpen &&
@@ -220,14 +222,14 @@ export function QuickLinks() {
                 className="widget-add-form panel"
                 role="dialog"
                 aria-modal="true"
-                aria-label="Add link"
+                aria-label={dict.addLink}
               >
-                <h3 className="widget-add-form-title">Add Link</h3>
+                <h3 className="widget-add-form-title">{dict.addLink}</h3>
                 <div className="form-fields">
                   <input
                     className="field"
                     type="text"
-                    placeholder="Name"
+                    placeholder={dict.linkName}
                     value={titleInput}
                     onChange={(e) => setTitleInput(e.target.value)}
                     required
@@ -236,7 +238,7 @@ export function QuickLinks() {
                   <input
                     className="field"
                     type="text"
-                    placeholder="URL (e.g., google.com)"
+                    placeholder={dict.linkUrl}
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
                     required
@@ -248,11 +250,9 @@ export function QuickLinks() {
                     className="btn-ghost"
                     onClick={() => setIsAddOpen(false)}
                   >
-                    Cancel
+                    {dict.cancel}
                   </button>
-                  <button type="submit" className="btn-primary">
-                    Add
-                  </button>
+                  <button type="submit" className="btn-primary">{dict.addLinkShort}</button>
                 </div>
               </form>
             </div>,

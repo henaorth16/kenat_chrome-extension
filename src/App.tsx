@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AppProvider, useApp } from './context/AppContext'
+import { useApp } from './context/AppContext'
 import { GeezClock } from './components/GeezClock'
 import { SearchBar } from './components/SearchBar'
 import { QuickLinks } from './components/QuickLinks'
@@ -12,6 +12,7 @@ import { QuoteWidget } from './components/QuoteWidget'
 import { BottomDock } from './components/BottomDock'
 import { SettingsPanel } from './components/SettingsPanel'
 import { getToday } from './lib/kenat'
+import { cssUrl, isSafeImageUrl } from './lib/urlSafety'
 import './App.css'
 
 const WALLPAPERS = [
@@ -32,12 +33,13 @@ function resolveWallpaperUrl(
   if (mode === 'unsplash') return pickDailyWallpaper()
   if (mode === 'custom') {
     const url = customUrl.trim()
-    return url || undefined
+    if (!url || !isSafeImageUrl(url)) return undefined
+    return url
   }
   return undefined
 }
 
-function Dashboard() {
+export default function App() {
   const { ready, settings } = useApp()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const ethToday = getToday().getEthiopian()
@@ -66,7 +68,7 @@ function Dashboard() {
       {wallpaperUrl && (
         <div
           className="app-wallpaper-backdrop"
-          style={{ backgroundImage: `url(${wallpaperUrl})` }}
+          style={{ backgroundImage: cssUrl(wallpaperUrl) }}
           aria-hidden
         />
       )}
@@ -113,13 +115,5 @@ function Dashboard() {
 
       <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
-  )
-}
-
-export default function App() {
-  return (
-    <AppProvider>
-      <Dashboard />
-    </AppProvider>
   )
 }

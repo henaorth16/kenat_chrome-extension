@@ -1,9 +1,17 @@
-import type { ContentLang, LangCode } from '../lib/types'
+import type { ContentLang, LangCode, SearchEngine } from '../lib/types'
 import { uiLang } from '../lib/types'
 
 const en = {
-  appName: 'New Tab',
-  searchPlaceholder: 'Search Google or type a URL',
+  appName: 'kenat_chrome_extention',
+  searchPlaceholder: 'Search the web or type a URL',
+  searchPlaceholderGoogle: 'Search Google or type a URL',
+  searchPlaceholderDuckduckgo: 'Search DuckDuckGo or type a URL',
+  searchPlaceholderBing: 'Search Bing or type a URL',
+  searchPlaceholderYoutube: 'Search YouTube',
+  engineGoogle: 'Google',
+  engineDuckduckgo: 'DuckDuckGo',
+  engineBing: 'Bing',
+  engineYoutube: 'YouTube',
   agenda: 'Agenda',
   addEvent: '+ Add',
   eventTitle: 'Event title',
@@ -31,7 +39,6 @@ const en = {
   addTodo: 'Add a task',
   countdowns: 'Countdowns',
   addCountdown: 'Add',
-  upcomingHolidays: 'Upcoming holidays',
   settings: 'Settings',
   settingsTabGeneral: 'General',
   settingsTabAppearance: 'Appearance',
@@ -50,10 +57,13 @@ const en = {
   numeralsArabic: 'Arabic',
   numeralsGeez: 'Geez',
   location: 'Weather location',
+  weatherLoadError: 'Could not load weather',
   notifyCountdowns: 'Notify on countdown day',
   feelsLike: 'Feels like',
   humidity: 'Humidity',
-  highLow: 'H / L',
+  wind: 'Wind',
+  hourlyForecast: 'Hourly Forecast',
+  dailyForecast: '5-Day Forecast',
   today: 'Today',
   title: 'Title',
   date: 'Date',
@@ -70,28 +80,46 @@ const en = {
   gregorian: 'Gregorian',
   searchCity: 'Search city…',
   close: 'Close',
+  addLink: 'Add Link',
+  addLinkShort: 'Add',
+  linkName: 'Name',
+  linkUrl: 'URL (e.g., google.com)',
+  newQuote: 'Tap for a new quote',
+  quoteLabel: 'Motivational quote',
+  quickActions: 'Quick actions',
+  cycleAccent: 'Cycle accent color',
+  toggleWallpaper: 'Toggle wallpaper',
+  invalidImageUrl: 'Enter a valid https:// image URL',
 }
 
 const am: typeof en = {
-  appName: 'አዲስ ትር',
-  searchPlaceholder: 'Google ፈልግ ወይም URL ይፃፉ',
-  agenda: 'Agenda',
+  appName: 'kenat_chrome_extention',
+  searchPlaceholder: 'ድረ-ገጽ ፈልግ ወይም URL ይፃፉ',
+  searchPlaceholderGoogle: 'Google ፈልግ ወይም URL ይፃፉ',
+  searchPlaceholderDuckduckgo: 'DuckDuckGo ፈልግ ወይም URL ይፃፉ',
+  searchPlaceholderBing: 'Bing ፈልግ ወይም URL ይፃፉ',
+  searchPlaceholderYoutube: 'YouTube ፈልግ',
+  engineGoogle: 'Google',
+  engineDuckduckgo: 'DuckDuckGo',
+  engineBing: 'Bing',
+  engineYoutube: 'YouTube',
+  agenda: 'አጀንዳ',
   addEvent: '+ ጨምር',
   eventTitle: 'የክስተት ርዕስ',
   emptyAgenda: 'መጪ ክስተት የለም',
-  catPersonal: 'Personal',
-  catWork: 'Work',
-  catImportant: 'Important',
-  background: 'Background',
-  backgroundSolid: 'Solid color',
-  backgroundPhoto: 'Landscape photo',
+  catPersonal: 'ግላዊ',
+  catWork: 'ሥራ',
+  catImportant: 'አስፈላጊ',
+  background: 'ጀርባ',
+  backgroundSolid: 'ጠንካራ ቀለም',
+  backgroundPhoto: 'የመሬት ገጽታ ፎቶ',
   backgroundCustom: 'ብጁ ምስል URL',
   backgroundImageUrl: 'የምስል URL',
-  accentColor: 'Accent color',
+  accentColor: 'የአጽንኦት ቀለም',
   accentCustom: 'ብጁ',
   widgetsVisibility: 'መግብሮች',
   showCalendar: 'ቀን መቁጠሪያ',
-  showAgenda: 'Agenda',
+  showAgenda: 'አጀንዳ',
   showCountdown: 'ቀነ-ቆጠራ',
   showTodo: 'ተግባራት',
   clockNumerals: 'የሰዓት ቁጥሮች',
@@ -102,7 +130,6 @@ const am: typeof en = {
   addTodo: 'ተግባር ጨምር',
   countdowns: 'ቀነ-ቆጠራ',
   addCountdown: 'ጨምር',
-  upcomingHolidays: 'መጪ በዓላት',
   settings: 'ቅንብሮች',
   settingsTabGeneral: 'አጠቃላይ',
   settingsTabAppearance: 'ገጽታ',
@@ -121,10 +148,13 @@ const am: typeof en = {
   numeralsArabic: 'ዐረብኛ',
   numeralsGeez: 'ግዕዝ',
   location: 'የአየር አካባቢ',
+  weatherLoadError: 'አየር ማግኘት አልተቻለም',
   notifyCountdowns: 'በቀነ-ቆጠራ ቀን አሳውቅ',
   feelsLike: 'ይሰማል',
   humidity: 'እርጥበት',
-  highLow: 'ከፍ / ዝቅ',
+  wind: 'ነፋስ',
+  hourlyForecast: 'የሰዓት ትንበያ',
+  dailyForecast: 'የ5 ቀን ትንበያ',
   today: 'ዛሬ',
   title: 'ርዕስ',
   date: 'ቀን',
@@ -141,6 +171,16 @@ const am: typeof en = {
   gregorian: 'ግሪጎሪያን',
   searchCity: 'ከተማ ፈልግ…',
   close: 'ዝጋ',
+  addLink: 'አገናኝ ጨምር',
+  addLinkShort: 'ጨምር',
+  linkName: 'ስም',
+  linkUrl: 'URL (ለምሳሌ google.com)',
+  newQuote: 'አዲስ ጥቅስ ጫን',
+  quoteLabel: 'አነቃቂ ጥቅስ',
+  quickActions: 'ፈጣን እርምጃዎች',
+  cycleAccent: 'የቀለም አምድ ቀይር',
+  toggleWallpaper: 'የጀርባ ምስል',
+  invalidImageUrl: 'ትክክለኛ https:// የምስል URL ያስገቡ',
 }
 
 export type Dictionary = typeof en
@@ -155,4 +195,18 @@ export function t(mode: LangCode): Dictionary {
 export function calT(mode: LangCode): Dictionary {
   const cal: ContentLang = mode === 'en' ? 'en' : 'am'
   return maps[cal]
+}
+
+export function searchPlaceholderFor(engine: SearchEngine, dict: Dictionary): string {
+  switch (engine) {
+    case 'duckduckgo':
+      return dict.searchPlaceholderDuckduckgo
+    case 'bing':
+      return dict.searchPlaceholderBing
+    case 'youtube':
+      return dict.searchPlaceholderYoutube
+    case 'google':
+    default:
+      return dict.searchPlaceholderGoogle
+  }
 }

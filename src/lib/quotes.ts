@@ -44,7 +44,6 @@ async function fetchQuoteFromUrl(url: string): Promise<Quote | null> {
   if (!res.ok) return null
   const data: unknown = await res.json()
 
-  // dummyjson: { quote, author }
   if (data && typeof data === 'object' && 'quote' in data) {
     const quote = (data as { quote?: unknown; author?: unknown }).quote
     const author = (data as { quote?: unknown; author?: unknown }).author
@@ -52,29 +51,6 @@ async function fetchQuoteFromUrl(url: string): Promise<Quote | null> {
       return {
         text: quote.trim(),
         author: typeof author === 'string' && author.trim() ? author.trim() : 'Unknown',
-      }
-    }
-  }
-
-  // quotable: { content, author }
-  if (data && typeof data === 'object' && 'content' in data) {
-    const content = (data as { content?: unknown; author?: unknown }).content
-    const author = (data as { content?: unknown; author?: unknown }).author
-    if (typeof content === 'string' && content.trim()) {
-      return {
-        text: content.trim(),
-        author: typeof author === 'string' && author.trim() ? author.trim() : 'Unknown',
-      }
-    }
-  }
-
-  // zenquotes: [{ q, a }]
-  if (Array.isArray(data) && data[0] && typeof data[0] === 'object') {
-    const row = data[0] as { q?: unknown; a?: unknown }
-    if (typeof row.q === 'string' && row.q.trim()) {
-      return {
-        text: row.q.trim(),
-        author: typeof row.a === 'string' && row.a.trim() ? row.a.trim() : 'Unknown',
       }
     }
   }

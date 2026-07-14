@@ -174,7 +174,7 @@ export function WeatherChip() {
       >
         {error && (
           <div className="weather-chip-state">
-            <span className="weather-err">{dict.location}</span>
+            <span className="weather-err">{dict.weatherLoadError}</span>
           </div>
         )}
         {!error && !weather && (
@@ -281,18 +281,18 @@ export function WeatherChip() {
                     <strong>{feels}°</strong>
                   </div>
                   <div className="metric-card">
-                    <span>Humidity</span>
+                    <span>{dict.humidity}</span>
                     <strong>{weather.humidity}%</strong>
                   </div>
                   <div className="metric-card">
-                    <span>Wind</span>
+                    <span>{dict.wind}</span>
                     <strong>{Math.round(weather.windSpeed)} km/h</strong>
                   </div>
                 </div>
 
                 {/* Hourly Forecast */}
                 <div className="drawer-section">
-                  <span className="drawer-section-title">Hourly Forecast</span>
+                  <span className="drawer-section-title">{dict.hourlyForecast}</span>
                   <div className="hourly-forecast-row">
                     {weather.hourly.map((h, idx) => (
                       <div key={idx} className="hourly-chip">
@@ -306,7 +306,7 @@ export function WeatherChip() {
 
                 {/* 5-Day Forecast */}
                 <div className="drawer-section">
-                  <span className="drawer-section-title">5-Day Forecast</span>
+                  <span className="drawer-section-title">{dict.dailyForecast}</span>
                   <div className="daily-forecast-list">
                     {weather.daily.map((d, idx) => (
                       <div key={idx} className="daily-row">

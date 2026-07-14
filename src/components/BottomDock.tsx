@@ -1,5 +1,5 @@
 import { useApp } from '../context/AppContext'
-import { ACCENT_PRESETS, uiLang } from '../lib/types'
+import { ACCENT_PRESETS } from '../lib/types'
 import './BottomDock.css'
 
 interface BottomDockProps {
@@ -7,8 +7,7 @@ interface BottomDockProps {
 }
 
 export function BottomDock({ onOpenSettings }: BottomDockProps) {
-  const { settings, updateSettings } = useApp()
-  const chromeAm = uiLang(settings.language) === 'am'
+  const { settings, dict, updateSettings } = useApp()
 
   const cycleAccent = () => {
     const idx = ACCENT_PRESETS.findIndex((p) => p.color === settings.accentColor)
@@ -28,13 +27,13 @@ export function BottomDock({ onOpenSettings }: BottomDockProps) {
   }
 
   return (
-    <nav className="bottom-dock animate-in" aria-label={chromeAm ? 'የቅንብር ምናሌ' : 'Quick actions'}>
+    <nav className="bottom-dock animate-in" aria-label={dict.quickActions}>
       <button
         type="button"
         className="dock-btn panel"
         onClick={cycleAccent}
-        title={chromeAm ? 'የቀለም አምድ ቀይር' : 'Cycle accent color'}
-        aria-label={chromeAm ? 'የቀለም አምድ ቀይር' : 'Cycle accent color'}
+        title={dict.cycleAccent}
+        aria-label={dict.cycleAccent}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" />
@@ -46,8 +45,8 @@ export function BottomDock({ onOpenSettings }: BottomDockProps) {
         type="button"
         className={`dock-btn panel ${settings.wallpaperMode !== 'solid' ? 'is-active' : ''}`}
         onClick={toggleWallpaper}
-        title={chromeAm ? 'የጀርባ ምስል' : 'Toggle wallpaper'}
-        aria-label={chromeAm ? 'የጀርባ ምስል' : 'Toggle wallpaper'}
+        title={dict.toggleWallpaper}
+        aria-label={dict.toggleWallpaper}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
@@ -60,8 +59,8 @@ export function BottomDock({ onOpenSettings }: BottomDockProps) {
         type="button"
         className="dock-btn panel"
         onClick={onOpenSettings}
-        title={chromeAm ? 'ቅንብሮች' : 'Settings'}
-        aria-label={chromeAm ? 'ቅንብሮች' : 'Settings'}
+        title={dict.settings}
+        aria-label={dict.settings}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="7" height="7" />

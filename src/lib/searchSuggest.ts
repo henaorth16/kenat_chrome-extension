@@ -1,19 +1,5 @@
 import type { SearchEngine } from './types'
-
-export function absoluteSuggestUrl(engine: SearchEngine, query: string): string {
-  const q = encodeURIComponent(query)
-  switch (engine) {
-    case 'duckduckgo':
-      return `https://duckduckgo.com/ac/?q=${q}&type=list`
-    case 'bing':
-      return `https://api.bing.com/osjson.aspx?query=${q}`
-    case 'youtube':
-      return `https://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=${q}`
-    case 'google':
-    default:
-      return `https://suggestqueries.google.com/complete/search?client=firefox&q=${q}`
-  }
-}
+import { absoluteSuggestUrl } from './suggestUrls'
 
 export function parseSuggestions(data: unknown): string[] {
   if (!Array.isArray(data)) return []

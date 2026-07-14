@@ -5,11 +5,13 @@ import type {
   ClockNumeralStyle,
   LangCode,
   NumeralStyle,
+  SearchEngine,
   ThemeMode,
   WallpaperMode,
   WidgetVisibility,
 } from '../lib/types'
 import { uiLang, ACCENT_PRESETS } from '../lib/types'
+import { isSafeImageUrl } from '../lib/urlSafety'
 import './SettingsPanel.css'
 
 interface SettingsPanelProps {
@@ -62,6 +64,11 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
 
   const applyCustomWallpaper = () => {
     const url = wallpaperUrlDraft.trim()
+    if (url && !isSafeImageUrl(url)) {
+      window.alert(dict.invalidImageUrl)
+      setWallpaperUrlDraft(settings.customWallpaperUrl)
+      return
+    }
     void updateSettings({
       customWallpaperUrl: url,
       wallpaperMode: url
@@ -185,6 +192,24 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
                   >
                     <option value="geez">{dict.numeralsGeez}</option>
                     <option value="arabic">{dict.numeralsArabic}</option>
+                  </select>
+                </label>
+
+                <label className="settings-row">
+                  <span className={chromeAm ? 'ethiopic' : ''}>{dict.searchEngine}</span>
+                  <select
+                    className="field"
+                    value={settings.searchEngine}
+                    onChange={(e) =>
+                      void updateSettings({
+                        searchEngine: e.target.value as SearchEngine,
+                      })
+                    }
+                  >
+                    <option value="google">{dict.engineGoogle}</option>
+                    <option value="duckduckgo">{dict.engineDuckduckgo}</option>
+                    <option value="bing">{dict.engineBing}</option>
+                    <option value="youtube">{dict.engineYoutube}</option>
                   </select>
                 </label>
               </div>

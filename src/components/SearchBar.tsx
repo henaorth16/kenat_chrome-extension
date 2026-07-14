@@ -10,6 +10,7 @@ import {
 import { createPortal } from 'react-dom'
 import { useApp } from '../context/AppContext'
 import { requestSearchSuggestions } from '../lib/searchSuggest'
+import { searchPlaceholderFor } from '../i18n'
 import { SEARCH_URLS, uiLang } from '../lib/types'
 import './SearchBar.css'
 
@@ -173,8 +174,8 @@ export function SearchBar() {
               if (suggestions.length) setOpen(true)
             }}
             onKeyDown={onKeyDown}
-            placeholder={dict.searchPlaceholder}
-            aria-label={dict.searchPlaceholder}
+            placeholder={searchPlaceholderFor(settings.searchEngine, dict)}
+            aria-label={searchPlaceholderFor(settings.searchEngine, dict)}
             aria-autocomplete="list"
             aria-controls={listId}
             aria-expanded={showSuggestions}

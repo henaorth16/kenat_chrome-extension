@@ -3,8 +3,23 @@ import react from '@vitejs/plugin-react'
 import { crx } from '@crxjs/vite-plugin'
 import path from 'node:path'
 import manifest from './manifest.config.ts'
-import { absoluteSuggestUrl } from './src/lib/searchSuggest.ts'
-import type { SearchEngine } from './src/lib/types.ts'
+
+type SearchEngine = 'google' | 'duckduckgo' | 'bing' | 'youtube'
+
+function absoluteSuggestUrl(engine: SearchEngine, query: string): string {
+  const q = encodeURIComponent(query)
+  switch (engine) {
+    case 'duckduckgo':
+      return `https://duckduckgo.com/ac/?q=${q}&type=list`
+    case 'bing':
+      return `https://api.bing.com/osjson.aspx?query=${q}`
+    case 'youtube':
+      return `https://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=${q}`
+    case 'google':
+    default:
+      return `https://suggestqueries.google.com/complete/search?client=firefox&q=${q}`
+  }
+}
 
 function apiProxyPlugin(): Plugin {
   return {
