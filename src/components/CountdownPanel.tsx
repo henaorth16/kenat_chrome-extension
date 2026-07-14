@@ -1,4 +1,5 @@
-import { type FormEvent, useState } from 'react'
+import { type FormEvent, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useApp } from '../context/AppContext'
 import {
   distanceToEthiopianDate,
@@ -22,6 +23,17 @@ export function CountdownPanel() {
   const [notify, setNotify] = useState(true)
   const chromeAm = uiLang(settings.language) === 'am'
   const contentLang = calLang(settings.language)
+
+  useEffect(() => {
+    if (!open) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [open])
 
   const add = (e: FormEvent) => {
     e.preventDefault()
@@ -60,51 +72,72 @@ export function CountdownPanel() {
         <button
           type="button"
           className="widget-action-btn"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen(true)}
         >
           {dict.addCountdown}
         </button>
       </header>
 
-      {open && (
-        <form className="countdown-form" onSubmit={add}>
-          <input
-            className={`field ${chromeAm ? 'ethiopic' : ''}`}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder={dict.title}
-            required
-          />
-          <input
-            className="field"
-            type="date"
-            value={dateValue}
-            onChange={(e) => setDateValue(e.target.value)}
-            required
-            aria-label={dict.date}
-          />
-          <label className="notify-row">
-            <input
-              type="checkbox"
-              checked={notify}
-              onChange={(e) => setNotify(e.target.checked)}
-            />
-            <span className={chromeAm ? 'ethiopic' : ''}>{dict.notify}</span>
-          </label>
-          <div className="countdown-form-actions">
-            <button
-              type="button"
-              className="btn-ghost"
-              onClick={() => setOpen(false)}
+      {open &&
+        createPortal(
+          <div
+            className="widget-add-modal-overlay"
+            onMouseDown={(e) => {
+              if (e.target === e.currentTarget) setOpen(false)
+            }}
+          >
+            <form
+              className="widget-add-form panel"
+              onSubmit={add}
+              role="dialog"
+              aria-modal="true"
+              aria-label={dict.addCountdown}
             >
-              {dict.cancel}
-            </button>
-            <button type="submit" className="btn-primary">
-              {dict.save}
-            </button>
-          </div>
-        </form>
-      )}
+              <h3 className={`widget-add-form-title ${chromeAm ? 'ethiopic' : ''}`}>
+                {dict.addCountdown}
+              </h3>
+              <div className="form-fields">
+                <input
+                  className={`field ${chromeAm ? 'ethiopic' : ''}`}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder={dict.title}
+                  required
+                  autoFocus
+                />
+                <input
+                  className="field"
+                  type="date"
+                  value={dateValue}
+                  onChange={(e) => setDateValue(e.target.value)}
+                  required
+                  aria-label={dict.date}
+                />
+                <label className="notify-row">
+                  <input
+                    type="checkbox"
+                    checked={notify}
+                    onChange={(e) => setNotify(e.target.checked)}
+                  />
+                  <span className={chromeAm ? 'ethiopic' : ''}>{dict.notify}</span>
+                </label>
+              </div>
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-ghost"
+                  onClick={() => setOpen(false)}
+                >
+                  {dict.cancel}
+                </button>
+                <button type="submit" className="btn-primary">
+                  {dict.save}
+                </button>
+              </div>
+            </form>
+          </div>,
+          document.body,
+        )}
 
       <div className="widget-body">
         {countdowns.length === 0 ? (

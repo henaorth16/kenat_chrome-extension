@@ -1,4 +1,5 @@
-import { type FormEvent, useMemo, useState } from 'react'
+import { type FormEvent, useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Kenat, { toGeez, type DiffBreakdown } from 'kenat'
 import { useApp } from '../context/AppContext'
 import { getHolidaysInMonth, getToday } from '../lib/kenat'
@@ -36,6 +37,17 @@ export function AgendaPanel({ year, month }: AgendaPanelProps) {
   const [title, setTitle] = useState('')
   const [dateValue, setDateValue] = useState('')
   const [category, setCategory] = useState('personal')
+
+  useEffect(() => {
+    if (!showAdd) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowAdd(false)
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [showAdd])
 
   const agenda = useMemo(() => {
     const holidays = getHolidaysInMonth(year, month, contentLang, distanceLang)
@@ -151,45 +163,73 @@ export function AgendaPanel({ year, month }: AgendaPanelProps) {
         <button
           type="button"
           className="widget-action-btn"
-          onClick={() => setShowAdd((v) => !v)}
+          onClick={() => setShowAdd(true)}
         >
           {dict.addEvent}
         </button>
       </header>
 
-      {showAdd && (
-        <form className="agenda-add-form" onSubmit={addEvent}>
-          <input
-            className={`field ${chromeAm ? 'ethiopic' : ''}`}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder={dict.eventTitle}
-            required
-          />
-          <div className="agenda-add-row">
-            <input
-              className="field"
-              type="date"
-              value={dateValue}
-              onChange={(e) => setDateValue(e.target.value)}
-              required
-              aria-label={dict.date}
-            />
-            <select
-              className="field"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+      {showAdd &&
+        createPortal(
+          <div
+            className="widget-add-modal-overlay"
+            onMouseDown={(e) => {
+              if (e.target === e.currentTarget) setShowAdd(false)
+            }}
+          >
+            <form
+              className="widget-add-form panel"
+              onSubmit={addEvent}
+              role="dialog"
+              aria-modal="true"
+              aria-label={dict.addEvent}
             >
-              <option value="personal">{dict.catPersonal}</option>
-              <option value="work">{dict.catWork}</option>
-              <option value="important">{dict.catImportant}</option>
-            </select>
-            <button type="submit" className="btn-primary">
-              {dict.save}
-            </button>
-          </div>
-        </form>
-      )}
+              <h3 className={`widget-add-form-title ${chromeAm ? 'ethiopic' : ''}`}>
+                {dict.addEvent}
+              </h3>
+              <div className="form-fields">
+                <input
+                  className={`field ${chromeAm ? 'ethiopic' : ''}`}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder={dict.eventTitle}
+                  required
+                  autoFocus
+                />
+                <input
+                  className="field"
+                  type="date"
+                  value={dateValue}
+                  onChange={(e) => setDateValue(e.target.value)}
+                  required
+                  aria-label={dict.date}
+                />
+                <select
+                  className="field"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  <option value="personal">{dict.catPersonal}</option>
+                  <option value="work">{dict.catWork}</option>
+                  <option value="important">{dict.catImportant}</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-ghost"
+                  onClick={() => setShowAdd(false)}
+                >
+                  {dict.cancel}
+                </button>
+                <button type="submit" className="btn-primary">
+                  {dict.save}
+                </button>
+              </div>
+            </form>
+          </div>,
+          document.body,
+        )}
 
       <div className="widget-body">
         {agenda.length === 0 ? (

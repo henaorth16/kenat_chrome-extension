@@ -4,26 +4,6 @@
   animation-delay: 100ms;
 }
 
-.agenda-add-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-bottom: 0.4rem;
-  flex-shrink: 0;
-}
-
-.agenda-add-row {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 0.35rem;
-}
-
-.agenda-add-row .btn-primary {
-  min-height: 30px;
-  padding: 0.35rem 0.75rem;
-  font-size: 0.76rem;
-}
-
 .agenda-row {
   padding-left: 0.35rem;
 }

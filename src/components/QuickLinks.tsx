@@ -210,19 +210,19 @@ export function QuickLinks() {
         {isAddOpen &&
           createPortal(
             <div
-              className="quick-links-modal-overlay"
+              className="widget-add-modal-overlay"
               onMouseDown={(e) => {
                 if (e.target === e.currentTarget) setIsAddOpen(false)
               }}
             >
               <form
                 onSubmit={addLink}
-                className="quick-links-form panel"
+                className="widget-add-form panel"
                 role="dialog"
                 aria-modal="true"
                 aria-label="Add link"
               >
-                <h3 className="quick-links-form-title">Add Link</h3>
+                <h3 className="widget-add-form-title">Add Link</h3>
                 <div className="form-fields">
                   <input
                     className="field"
