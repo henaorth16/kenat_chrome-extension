@@ -1,3 +1,4 @@
+import { getExtensionApi } from './extension'
 import type { AppSettings, CountdownItem, TodoItem, UserEventItem } from './types'
 import { DEFAULT_SETTINGS } from './types'
 
@@ -9,8 +10,9 @@ const KEYS = {
 } as const
 
 async function getLocalRaw(key: string): Promise<unknown | undefined> {
-  if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-    const result = await chrome.storage.local.get(key)
+  const ext = getExtensionApi()
+  if (ext?.storage?.local) {
+    const result = await ext.storage.local.get(key)
     return result[key]
   }
   try {
@@ -27,8 +29,9 @@ async function getLocal<T>(key: string, fallback: T): Promise<T> {
 }
 
 async function setLocal(key: string, value: unknown): Promise<void> {
-  if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-    await chrome.storage.local.set({ [key]: value })
+  const ext = getExtensionApi()
+  if (ext?.storage?.local) {
+    await ext.storage.local.set({ [key]: value })
     return
   }
   localStorage.setItem(key, JSON.stringify(value))

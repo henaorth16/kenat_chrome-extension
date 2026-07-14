@@ -1,5 +1,6 @@
 import type { SearchEngine } from './types'
 import { absoluteSuggestUrl } from './suggestUrls'
+import { getExtensionApi, isExtensionPage } from './extension'
 
 export function parseSuggestions(data: unknown): string[] {
   if (!Array.isArray(data)) return []
@@ -58,15 +59,6 @@ function isDevServerOrigin(): boolean {
   )
 }
 
-function isExtensionPage(): boolean {
-  return (
-    typeof chrome !== 'undefined' &&
-    typeof chrome.runtime?.id === 'string' &&
-    typeof location !== 'undefined' &&
-    location.protocol === 'chrome-extension:'
-  )
-}
-
 /** Page-facing suggest request — never hits CORS-blocked hosts from the UI. */
 export async function requestSearchSuggestions(
   engine: SearchEngine,
@@ -87,13 +79,14 @@ export async function requestSearchSuggestions(
   }
 
   // Packaged extension page: background worker (host permissions bypass CORS)
-  if (isExtensionPage()) {
+  const ext = getExtensionApi()
+  if (isExtensionPage() && ext?.runtime) {
     return new Promise((resolve) => {
       try {
-        chrome.runtime.sendMessage(
+        ext.runtime.sendMessage(
           { type: 'SEARCH_SUGGEST', engine, query: q },
           (response: { ok?: boolean; suggestions?: string[] } | undefined) => {
-            if (chrome.runtime.lastError || !response?.ok) {
+            if (ext.runtime.lastError || !response?.ok) {
               resolve([])
               return
             }

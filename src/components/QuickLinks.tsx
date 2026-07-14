@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useApp } from '../context/AppContext'
+import { getExtensionApi, getFaviconUrl } from '../lib/extension'
 import './QuickLinks.css'
 
 interface BookmarkLink {
@@ -18,16 +19,10 @@ const MOCK_LINKS: BookmarkLink[] = [
   { title: 'Reddit', url: 'https://www.reddit.com' },
 ]
 
-function getFaviconUrl(url: string): string {
-  if (typeof chrome !== 'undefined' && chrome.runtime?.id) {
-    return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`
-  }
-  return `https://www.google.com/s2/favicons?sz=32&domain_url=${encodeURIComponent(url)}`
-}
-
 async function loadLinks(): Promise<BookmarkLink[]> {
-  if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-    const result = await chrome.storage.local.get(STORAGE_KEY)
+  const ext = getExtensionApi()
+  if (ext?.storage?.local) {
+    const result = await ext.storage.local.get(STORAGE_KEY)
     return (result[STORAGE_KEY] as BookmarkLink[]) || []
   }
   try {
@@ -39,8 +34,9 @@ async function loadLinks(): Promise<BookmarkLink[]> {
 }
 
 async function saveLinks(links: BookmarkLink[]): Promise<void> {
-  if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-    await chrome.storage.local.set({ [STORAGE_KEY]: links })
+  const ext = getExtensionApi()
+  if (ext?.storage?.local) {
+    await ext.storage.local.set({ [STORAGE_KEY]: links })
     return
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(links))
@@ -70,8 +66,9 @@ export function QuickLinks() {
         setLinks(saved)
       } else {
         // Prepopulate from bookmarks on first load
-        if (typeof chrome !== 'undefined' && chrome.bookmarks && chrome.bookmarks.getRecent) {
-          chrome.bookmarks.getRecent(15, (results) => {
+        const ext = getExtensionApi()
+        if (ext?.bookmarks?.getRecent) {
+          ext.bookmarks.getRecent(15, (results) => {
             if (results && results.length > 0) {
               const filtered = results
                 .filter((node) => node.url)

@@ -19,11 +19,10 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
+    // "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "manifest.config.ts"]
+  "include": ["src", "manifest.config.ts", "manifest.firefox.config.ts"]
 }

@@ -1,17 +1,20 @@
 import { alarmNameFor, notifyCountdown } from './lib/alarms'
+import { getExtensionApi } from './lib/extension'
 import { fetchSearchSuggestions } from './lib/searchSuggest'
 import type { Quote } from './lib/quotes'
 import { loadCountdowns } from './lib/storage'
 import type { SearchEngine } from './lib/types'
 
-chrome.alarms.onAlarm.addListener(async (alarm) => {
-  if (!alarm.name.startsWith('countdown:')) return
+const ext = getExtensionApi()
+
+ext?.alarms.onAlarm.addListener(async (alarm) => {
+  if (!ext || !alarm.name.startsWith('countdown:')) return
   const id = alarm.name.slice('countdown:'.length)
   const items = await loadCountdowns()
   const item = items.find((c) => c.id === id)
   const title = item?.title ?? 'Countdown'
   await notifyCountdown('Reminder', `${title} — today`)
-  await chrome.alarms.clear(alarmNameFor(id))
+  await ext.alarms.clear(alarmNameFor(id))
 })
 
 async function fetchQuoteUpstream(): Promise<Quote | null> {
@@ -31,7 +34,7 @@ async function fetchQuoteUpstream(): Promise<Quote | null> {
   }
 }
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+ext?.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (!message || typeof message.type !== 'string') return undefined
 
   if (message.type === 'SEARCH_SUGGEST') {

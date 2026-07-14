@@ -1,3 +1,5 @@
+import { getExtensionApi, isExtensionPage } from './extension'
+
 export interface Quote {
   text: string
   author: string
@@ -30,15 +32,6 @@ function isDevServerOrigin(): boolean {
   )
 }
 
-function isExtensionPage(): boolean {
-  return (
-    typeof chrome !== 'undefined' &&
-    typeof chrome.runtime?.id === 'string' &&
-    typeof location !== 'undefined' &&
-    location.protocol === 'chrome-extension:'
-  )
-}
-
 async function fetchQuoteFromUrl(url: string): Promise<Quote | null> {
   const res = await fetch(url, { headers: { Accept: 'application/json' } })
   if (!res.ok) return null
@@ -59,10 +52,13 @@ async function fetchQuoteFromUrl(url: string): Promise<Quote | null> {
 }
 
 async function fetchQuoteViaWorker(): Promise<Quote | null> {
+  const ext = getExtensionApi()
+  if (!ext?.runtime) return null
+
   return new Promise((resolve) => {
     try {
-      chrome.runtime.sendMessage({ type: 'FETCH_QUOTE' }, (response) => {
-        if (chrome.runtime.lastError || !response?.ok || !response.quote) {
+      ext.runtime.sendMessage({ type: 'FETCH_QUOTE' }, (response) => {
+        if (ext.runtime.lastError || !response?.ok || !response.quote) {
           resolve(null)
           return
         }

@@ -2,7 +2,8 @@ import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { crx } from '@crxjs/vite-plugin'
 import path from 'node:path'
-import manifest from './manifest.config.ts'
+import chromeManifest from './manifest.config.ts'
+import firefoxManifest from './manifest.firefox.config.ts'
 
 type SearchEngine = 'google' | 'duckduckgo' | 'bing' | 'youtube'
 
@@ -73,11 +74,25 @@ function apiProxyPlugin(): Plugin {
   }
 }
 
-export default defineConfig({
-  plugins: [react(), crx({ manifest }), apiProxyPlugin()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
+export default defineConfig(({ mode }) => {
+  const isFirefox = mode === 'firefox'
+
+  return {
+    plugins: [
+      react(),
+      crx({
+        manifest: isFirefox ? firefoxManifest : chromeManifest,
+        browser: isFirefox ? 'firefox' : 'chrome',
+      }),
+      apiProxyPlugin(),
+    ],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
     },
-  },
+    build: {
+      outDir: isFirefox ? 'dist/firefox' : 'dist',
+    },
+  }
 })

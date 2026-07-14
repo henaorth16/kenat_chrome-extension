@@ -1,3 +1,4 @@
+import { getExtensionApi } from './extension'
 import type { CountdownItem } from './types'
 
 const ALARM_PREFIX = 'countdown:'
@@ -11,13 +12,14 @@ export async function syncCountdownAlarms(
   countdowns: CountdownItem[],
   enabled: boolean,
 ): Promise<void> {
-  if (typeof chrome === 'undefined' || !chrome.alarms) return
+  const ext = getExtensionApi()
+  if (!ext?.alarms) return
 
-  const existing = await chrome.alarms.getAll()
+  const existing = await ext.alarms.getAll()
   await Promise.all(
     existing
       .filter((a) => a.name.startsWith(ALARM_PREFIX))
-      .map((a) => chrome.alarms.clear(a.name)),
+      .map((a) => ext.alarms.clear(a.name)),
   )
 
   if (!enabled) return
@@ -28,7 +30,7 @@ export async function syncCountdownAlarms(
     const { year, month, day } = item.gregorian
     const when = new Date(year, month - 1, day, 9, 0, 0, 0).getTime()
     if (when <= now) continue
-    await chrome.alarms.create(alarmNameFor(item.id), { when })
+    await ext.alarms.create(alarmNameFor(item.id), { when })
   }
 }
 
@@ -36,8 +38,9 @@ export async function notifyCountdown(
   title: string,
   message: string,
 ): Promise<void> {
-  if (typeof chrome === 'undefined' || !chrome.notifications) return
-  await chrome.notifications.create({
+  const ext = getExtensionApi()
+  if (!ext?.notifications) return
+  await ext.notifications.create({
     type: 'basic',
     iconUrl: 'icons/icon128.png',
     title,
