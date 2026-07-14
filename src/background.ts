@@ -7,7 +7,7 @@ import type { SearchEngine } from './lib/types'
 
 const ext = getExtensionApi()
 
-ext?.alarms.onAlarm.addListener(async (alarm) => {
+ext?.alarms?.onAlarm?.addListener(async (alarm) => {
   if (!ext || !alarm.name.startsWith('countdown:')) return
   const id = alarm.name.slice('countdown:'.length)
   const items = await loadCountdowns()
