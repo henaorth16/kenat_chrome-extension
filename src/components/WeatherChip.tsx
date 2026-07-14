@@ -165,32 +165,43 @@ export function WeatherChip() {
         type="button"
         className="weather-card panel"
         onClick={() => setIsDrawerOpen(true)}
+        aria-label={dict.location}
       >
-        {error && <span className="weather-err">{dict.location}</span>}
-        {!error && !weather && <span className="weather-loading">…</span>}
+        {error && (
+          <div className="weather-card-inner weather-card-state">
+            <span className="weather-err">{dict.location}</span>
+          </div>
+        )}
+        {!error && !weather && (
+          <div className="weather-card-inner weather-card-state">
+            <span className="weather-loading">…</span>
+          </div>
+        )}
         {weather && temp !== null && (
-          <>
-            <div className="weather-temp-col">
-              <strong className="weather-temp">
-                {temp}<span>{unit}</span>
-              </strong>
+          <div className="weather-card-inner">
+            <div className="weather-icon-wrap">
+              <WeatherIcon code={weather.weatherCode} size={36} />
+            </div>
+            <div className="weather-main">
+              <div className="weather-top-row">
+                <strong className="weather-temp">
+                  {temp}
+                  <span>{unit}</span>
+                </strong>
+                <span className={`weather-cond ${chromeAm ? 'ethiopic' : ''}`}>
+                  {weatherLabel(weather.weatherCode, chromeLang)}
+                </span>
+              </div>
+              <span className="weather-loc">
+                <IoLocationSharp size={11} aria-hidden />
+                {settings.weatherLocation.name}
+              </span>
               <div className="weather-extremes">
-                <span>H: {high}°</span>
-                <span>L: {low}°</span>
+                <span className="weather-pill">H {high}°</span>
+                <span className="weather-pill">L {low}°</span>
               </div>
             </div>
-            <div className="weather-detail-col">
-              <div className="weather-desc-row">
-                <WeatherIcon code={weather.weatherCode} size={34} />
-                <div className="weather-desc-meta">
-                  <span className="weather-loc" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
-                    <IoLocationSharp size={11} style={{ color: 'var(--accent)', flexShrink: 0 }} />
-                    {settings.weatherLocation.name}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </>
+          </div>
         )}
       </button>
 
@@ -208,7 +219,7 @@ export function WeatherChip() {
           )}
 
           <div className={`weather-drawer panel ${isDrawerOpen ? 'is-open' : ''}`}>
-            <header className="weather-drawer-head">
+            <header className="weather-drawer-head widget-head">
               <div className="drawer-title-wrap">
                 <h2 className="weather-loc-title">{settings.weatherLocation.name}</h2>
                 {weather && (
@@ -219,11 +230,12 @@ export function WeatherChip() {
               </div>
               <button
                 type="button"
-                className="icon-btn close-btn"
+                className="weather-close-btn"
                 onClick={() => {
                   setIsDrawerOpen(false)
                   setQuery('')
                 }}
+                aria-label={dict.close}
               >
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -247,15 +259,15 @@ export function WeatherChip() {
 
                 {/* Quick Metrics Grid */}
                 <div className="weather-metrics-grid">
-                  <div className="metric-card panel">
+                  <div className="metric-card">
                     <span>{dict.feelsLike}</span>
                     <strong>{feels}°</strong>
                   </div>
-                  <div className="metric-card panel">
+                  <div className="metric-card">
                     <span>Humidity</span>
                     <strong>{weather.humidity}%</strong>
                   </div>
-                  <div className="metric-card panel">
+                  <div className="metric-card">
                     <span>Wind</span>
                     <strong>{Math.round(weather.windSpeed)} km/h</strong>
                   </div>
@@ -266,7 +278,7 @@ export function WeatherChip() {
                   <span className="drawer-section-title">Hourly Forecast</span>
                   <div className="hourly-forecast-row">
                     {weather.hourly.map((h, idx) => (
-                      <div key={idx} className="hourly-chip panel">
+                      <div key={idx} className="hourly-chip">
                         <span className="hourly-time">{formatHour(h.time)}</span>
                         <WeatherIcon code={h.weatherCode} size={20} />
                         <span className="hourly-temp">{convertTemp(h.temp, settings.tempUnit)}°</span>
@@ -280,7 +292,7 @@ export function WeatherChip() {
                   <span className="drawer-section-title">5-Day Forecast</span>
                   <div className="daily-forecast-list">
                     {weather.daily.map((d, idx) => (
-                      <div key={idx} className="daily-row panel">
+                      <div key={idx} className="daily-row">
                         <span className="daily-day-name ethiopic">{formatDay(d.date, idx)}</span>
                         <WeatherIcon code={d.weatherCode} size={22} />
                         <div className="daily-range">
