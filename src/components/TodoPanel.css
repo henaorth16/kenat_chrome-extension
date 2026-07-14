@@ -1,8 +1,6 @@
 .todo-panel {
   width: 100%;
   min-width: 0;
-  height: fit-content;
-  max-height: 13.5rem;
   animation-delay: 140ms;
 }
 

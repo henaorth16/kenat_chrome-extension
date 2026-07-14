@@ -95,12 +95,13 @@ export function TodoPanel() {
         </button>
       </form>
 
-      {sorted.length === 0 ? (
-        <p className={`widget-empty ${chromeAm ? 'ethiopic' : ''}`}>{dict.emptyTodos}</p>
-      ) : (
-        <ul className="todo-list widget-list">
-          {sorted.map((item) => (
-            <li key={item.id} className={`widget-row todo-row ${item.completed ? 'done' : ''} ${item.id === editingId ? 'editing-row' : ''}`}>
+      <div className="widget-body">
+        {sorted.length === 0 ? (
+          <p className={`widget-empty ${chromeAm ? 'ethiopic' : ''}`}>{dict.emptyTodos}</p>
+        ) : (
+          <ul className="todo-list widget-list">
+            {sorted.map((item) => (
+              <li key={item.id} className={`widget-row todo-row ${item.completed ? 'done' : ''} ${item.id === editingId ? 'editing-row' : ''}`}>
               {item.id === editingId ? (
                 <div className="todo-edit-wrap">
                   <input
@@ -177,9 +178,10 @@ export function TodoPanel() {
                 </>
               )}
             </li>
-          ))}
-        </ul>
-      )}
+            ))}
+          </ul>
+        )}
+      </div>
     </section>
   )
 }

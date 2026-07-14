@@ -1,8 +1,7 @@
 .calendar {
   width: 100%;
   min-width: 0;
-  height: fit-content;
-  align-self: start;
+  height: 100%;
   padding: 0.7rem 0.75rem 0.65rem;
   display: flex;
   flex-direction: column;
@@ -69,6 +68,8 @@
 }
 
 .calendar-body {
+  flex: 1;
+  min-height: 0;
   background: var(--surface-soft);
   border: 1px solid var(--border-inner);
   border-radius: 14px;

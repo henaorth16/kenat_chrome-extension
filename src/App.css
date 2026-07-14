@@ -54,7 +54,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.65rem;
-  align-items: start;
+  align-items: stretch;
   width: 100%;
 }
 

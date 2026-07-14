@@ -106,49 +106,51 @@ export function CountdownPanel() {
         </form>
       )}
 
-      {countdowns.length === 0 ? (
-        <p className={`widget-empty ${chromeAm ? 'ethiopic' : ''}`}>
-          {dict.emptyCountdowns}
-        </p>
-      ) : (
-        <ul className="countdown-list widget-list">
-          {countdowns.map((item) => {
-            const dist = distanceToEthiopianDate(item.ethiopian, contentLang)
-            const dateLabel =
-              settings.numeralStyle === 'geez'
-                ? `${toGeez(item.ethiopian.day)}/${toGeez(item.ethiopian.month)}/${toGeez(item.ethiopian.year)}`
-                : `${item.ethiopian.day}/${item.ethiopian.month}/${item.ethiopian.year}`
-            return (
-              <li key={item.id} className="widget-row countdown-row">
-                <div>
-                  <strong className={chromeAm ? 'ethiopic' : ''}>
-                    {item.title}
-                  </strong>
-                  <span className="countdown-date ethiopic">{dateLabel}</span>
-                </div>
-                <div className="countdown-right">
-                  <span
-                    className={`countdown-eta ${dist.daysUntil < 0 ? 'passed' : ''} ethiopic`}
-                  >
-                    {dist.label}
-                  </span>
-                  <button
-                    type="button"
-                    className="icon-btn danger"
-                    onClick={() => remove(item.id)}
-                    aria-label={dict.delete}
-                  >
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-              </li>
-            )
-          })}
-        </ul>
-      )}
+      <div className="widget-body">
+        {countdowns.length === 0 ? (
+          <p className={`widget-empty ${chromeAm ? 'ethiopic' : ''}`}>
+            {dict.emptyCountdowns}
+          </p>
+        ) : (
+          <ul className="countdown-list widget-list">
+            {countdowns.map((item) => {
+              const dist = distanceToEthiopianDate(item.ethiopian, contentLang)
+              const dateLabel =
+                settings.numeralStyle === 'geez'
+                  ? `${toGeez(item.ethiopian.day)}/${toGeez(item.ethiopian.month)}/${toGeez(item.ethiopian.year)}`
+                  : `${item.ethiopian.day}/${item.ethiopian.month}/${item.ethiopian.year}`
+              return (
+                <li key={item.id} className="widget-row countdown-row">
+                  <div>
+                    <strong className={chromeAm ? 'ethiopic' : ''}>
+                      {item.title}
+                    </strong>
+                    <span className="countdown-date ethiopic">{dateLabel}</span>
+                  </div>
+                  <div className="countdown-right">
+                    <span
+                      className={`countdown-eta ${dist.daysUntil < 0 ? 'passed' : ''} ethiopic`}
+                    >
+                      {dist.label}
+                    </span>
+                    <button
+                      type="button"
+                      className="icon-btn danger"
+                      onClick={() => remove(item.id)}
+                      aria-label={dict.delete}
+                    >
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </div>
     </section>
   )
 }

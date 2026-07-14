@@ -1,6 +1,10 @@
 /* Shared bottom-widget panel styling */
 .widget-panel {
+  height: 100%;
+  min-height: 0;
   padding: 0.7rem 0.75rem 0.65rem;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -55,6 +59,22 @@
   flex-shrink: 0;
 }
 
+.widget-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.widget-body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 .widget-list {
   list-style: none;
   margin: 0;
@@ -62,8 +82,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.22rem;
-  min-height: 0;
-  overflow-y: auto;
 }
 
 .widget-row {
@@ -88,7 +106,12 @@
 }
 
 .widget-empty {
-  margin: 0.65rem 0.25rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0.5rem;
   color: var(--label-secondary);
   font-size: 0.74rem;
   font-weight: 500;

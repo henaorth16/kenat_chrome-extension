@@ -191,53 +191,56 @@ export function AgendaPanel({ year, month }: AgendaPanelProps) {
         </form>
       )}
 
-      <ul className="agenda-list widget-list">
-        {agenda.map((item) => (
-          <li key={item.id} className={`widget-row agenda-row ${item.type === 'user' ? 'is-user-event' : ''}`}>
-            <span
-              className={`event-pill ${item.daysUntil === 0 ? 'is-today' : ''} ${item.colorClass}`}
-            />
-            <div className="agenda-main">
-              <strong className="ethiopic">{item.name}</strong>
-              <span className="agenda-date ethiopic">
-                {settings.numeralStyle === 'geez'
-                  ? `${toGeez(item.ethiopian.day)}/${toGeez(item.ethiopian.month)}`
-                  : `${item.ethiopian.day}/${item.ethiopian.month}`}
-              </span>
-            </div>
-
-            <div className="agenda-actions">
-              <span className={`agenda-eta ${chromeAm ? 'ethiopic' : ''}`}>
-                {item.daysUntil === 0 ? dict.today : item.distanceLabel}
-              </span>
-              {item.type === 'user' && (
-                <button
-                  type="button"
-                  className="icon-btn delete-btn"
-                  onClick={() => handleDeleteEvent(item.id)}
-                  aria-label={dict.delete}
-                >
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3.2"
-                    strokeLinecap="round"
-                  >
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
-              )}
-            </div>
-          </li>
-        ))}
-        {agenda.length === 0 && (
+      <div className="widget-body">
+        {agenda.length === 0 ? (
           <p className={`widget-empty ${chromeAm ? 'ethiopic' : ''}`}>{dict.emptyAgenda}</p>
+        ) : (
+          <ul className="agenda-list widget-list">
+            {agenda.map((item) => (
+              <li key={item.id} className={`widget-row agenda-row ${item.type === 'user' ? 'is-user-event' : ''}`}>
+                <span
+                  className={`event-pill ${item.daysUntil === 0 ? 'is-today' : ''} ${item.colorClass}`}
+                />
+                <div className="agenda-main">
+                  <strong className="ethiopic">{item.name}</strong>
+                  <span className="agenda-date ethiopic">
+                    {settings.numeralStyle === 'geez'
+                      ? `${toGeez(item.ethiopian.day)}/${toGeez(item.ethiopian.month)}`
+                      : `${item.ethiopian.day}/${item.ethiopian.month}`}
+                  </span>
+                </div>
+
+                <div className="agenda-actions">
+                  <span className={`agenda-eta ${chromeAm ? 'ethiopic' : ''}`}>
+                    {item.daysUntil === 0 ? dict.today : item.distanceLabel}
+                  </span>
+                  {item.type === 'user' && (
+                    <button
+                      type="button"
+                      className="icon-btn delete-btn"
+                      onClick={() => handleDeleteEvent(item.id)}
+                      aria-label={dict.delete}
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3.2"
+                        strokeLinecap="round"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
-      </ul>
+      </div>
     </section>
   )
 }
