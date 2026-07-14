@@ -4,11 +4,15 @@ import { useApp } from '../context/AppContext'
 import {
   distanceToEthiopianDate,
   ethiopianToGregorian,
-  gregorianToEthiopian,
   toGeez,
 } from '../lib/kenat'
 import type { CountdownItem } from '../lib/types'
 import { calLang, uiLang } from '../lib/types'
+import {
+  EthiopianDateSelector,
+  getDefaultEthiopianDate,
+  type EthiopianDateValue,
+} from './EthiopianDateSelector'
 import './CountdownPanel.css'
 
 function uid() {
@@ -19,7 +23,7 @@ export function CountdownPanel() {
   const { countdowns, setCountdowns, dict, settings } = useApp()
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState('')
-  const [dateValue, setDateValue] = useState('')
+  const [ethDate, setEthDate] = useState<EthiopianDateValue>(getDefaultEthiopianDate)
   const [notify, setNotify] = useState(true)
   const chromeAm = uiLang(settings.language) === 'am'
   const contentLang = calLang(settings.language)
@@ -37,21 +41,19 @@ export function CountdownPanel() {
 
   const add = (e: FormEvent) => {
     e.preventDefault()
-    if (!title.trim() || !dateValue) return
-    const [y, m, d] = dateValue.split('-').map(Number)
-    const eth = gregorianToEthiopian({ year: y, month: m, day: d })
-    const gregorian = ethiopianToGregorian(eth)
+    if (!title.trim()) return
+    const gregorian = ethiopianToGregorian(ethDate)
     const item: CountdownItem = {
       id: uid(),
       title: title.trim(),
-      ethiopian: eth,
+      ethiopian: { ...ethDate },
       gregorian,
       notify,
       createdAt: Date.now(),
     }
     void setCountdowns([item, ...countdowns])
     setTitle('')
-    setDateValue('')
+    setEthDate(getDefaultEthiopianDate())
     setOpen(false)
   }
 
@@ -72,7 +74,10 @@ export function CountdownPanel() {
         <button
           type="button"
           className="widget-action-btn"
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setEthDate(getDefaultEthiopianDate())
+            setOpen(true)
+          }}
         >
           {dict.addCountdown}
         </button>
@@ -105,13 +110,10 @@ export function CountdownPanel() {
                   required
                   autoFocus
                 />
-                <input
-                  className="field"
-                  type="date"
-                  value={dateValue}
-                  onChange={(e) => setDateValue(e.target.value)}
-                  required
-                  aria-label={dict.date}
+                <EthiopianDateSelector
+                  value={ethDate}
+                  onChange={setEthDate}
+                  ariaLabel={dict.date}
                 />
                 <label className="notify-row">
                   <input

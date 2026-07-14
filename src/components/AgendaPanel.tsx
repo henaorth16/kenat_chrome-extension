@@ -6,6 +6,11 @@ import { getHolidaysInMonth, getToday } from '../lib/kenat'
 import { getHolidayColorClass, getUserEventColorClass } from '../lib/holidayColors'
 import type { UserEventItem } from '../lib/types'
 import { calLang, uiLang } from '../lib/types'
+import {
+  EthiopianDateSelector,
+  getDefaultEthiopianDate,
+  type EthiopianDateValue,
+} from './EthiopianDateSelector'
 import './AgendaPanel.css'
 
 interface AgendaItem {
@@ -35,7 +40,7 @@ export function AgendaPanel({ year, month }: AgendaPanelProps) {
 
   const [showAdd, setShowAdd] = useState(false)
   const [title, setTitle] = useState('')
-  const [dateValue, setDateValue] = useState('')
+  const [ethDate, setEthDate] = useState<EthiopianDateValue>(getDefaultEthiopianDate)
   const [category, setCategory] = useState('personal')
 
   useEffect(() => {
@@ -118,24 +123,21 @@ export function AgendaPanel({ year, month }: AgendaPanelProps) {
 
   const addEvent = (e: FormEvent) => {
     e.preventDefault()
-    if (!title.trim() || !dateValue) return
-    const [y, m, d] = dateValue.split('-').map(Number)
-    const kenat = new Kenat(new Date(y, m - 1, d))
-    const eth = kenat.getEthiopian()
+    if (!title.trim()) return
 
     const item: UserEventItem = {
       id: uid(),
       title: title.trim(),
       category,
-      year: eth.year,
-      month: eth.month,
-      day: eth.day,
+      year: ethDate.year,
+      month: ethDate.month,
+      day: ethDate.day,
       createdAt: Date.now(),
     }
 
     void setUserEvents([item, ...userEvents])
     setTitle('')
-    setDateValue('')
+    setEthDate(getDefaultEthiopianDate())
     setShowAdd(false)
   }
 
@@ -163,7 +165,10 @@ export function AgendaPanel({ year, month }: AgendaPanelProps) {
         <button
           type="button"
           className="widget-action-btn"
-          onClick={() => setShowAdd(true)}
+          onClick={() => {
+            setEthDate(getDefaultEthiopianDate())
+            setShowAdd(true)
+          }}
         >
           {dict.addEvent}
         </button>
@@ -196,13 +201,10 @@ export function AgendaPanel({ year, month }: AgendaPanelProps) {
                   required
                   autoFocus
                 />
-                <input
-                  className="field"
-                  type="date"
-                  value={dateValue}
-                  onChange={(e) => setDateValue(e.target.value)}
-                  required
-                  aria-label={dict.date}
+                <EthiopianDateSelector
+                  value={ethDate}
+                  onChange={setEthDate}
+                  ariaLabel={dict.date}
                 />
                 <select
                   className="field"

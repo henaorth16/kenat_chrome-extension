@@ -211,6 +211,37 @@ export function distanceToEthiopianDate(
   }
 }
 
+export function getTodayEthiopian(): EthiopianDate {
+  return getToday().getEthiopian()
+}
+
+export function getDaysInEthiopianMonth(year: number, month: number): number {
+  const grid = MonthGrid.create({
+    year,
+    month,
+    useGeez: false,
+    weekdayLang: 'english',
+    weekStart: 1,
+  })
+  return grid.days.filter((day) => day !== null).length
+}
+
+export function getEthiopianMonthNames(
+  lang: ContentLang,
+  useGeez: boolean,
+): string[] {
+  const kenatLang = toKenatLang(lang)
+  return Array.from({ length: 13 }, (_, index) =>
+    MonthGrid.create({
+      year: 2018,
+      month: index + 1,
+      useGeez,
+      weekdayLang: kenatLang,
+      weekStart: 1,
+    }).monthName,
+  )
+}
+
 export function ethiopianToGregorian(eth: EthiopianDate): {
   year: number
   month: number
