@@ -180,9 +180,13 @@ export function WeatherChip() {
         {weather && temp !== null && (
           <div className="weather-card-inner">
             <div className="weather-icon-wrap">
-              <WeatherIcon code={weather.weatherCode} size={36} />
+              <WeatherIcon code={weather.weatherCode} size={34} />
             </div>
             <div className="weather-main">
+              <span className="weather-loc">
+                <IoLocationSharp size={11} aria-hidden />
+                {settings.weatherLocation.name}
+              </span>
               <div className="weather-top-row">
                 <strong className="weather-temp">
                   {temp}
@@ -192,10 +196,6 @@ export function WeatherChip() {
                   {weatherLabel(weather.weatherCode, chromeLang)}
                 </span>
               </div>
-              <span className="weather-loc">
-                <IoLocationSharp size={11} aria-hidden />
-                {settings.weatherLocation.name}
-              </span>
               <div className="weather-extremes">
                 <span className="weather-pill">H {high}°</span>
                 <span className="weather-pill">L {low}°</span>

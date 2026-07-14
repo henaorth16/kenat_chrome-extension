@@ -61,45 +61,43 @@ export function GeezClock() {
   const greeting = getGreeting(now.getHours(), chromeAm)
 
   return (
-    <section className="clock-block panel animate-in" aria-label={timeLabel}>
+    <section className="clock-block animate-in" aria-label={timeLabel}>
       <div className="clock-layout">
-        <div className="clock-dial-wrap">
-          <div className="clock-face" role="img" aria-label={timeLabel}>
-            {Array.from({ length: 60 }, (_, i) => (
+        <div className="clock-face" role="img" aria-label={timeLabel}>
+          {Array.from({ length: 60 }, (_, i) => (
+            <span
+              key={i}
+              className={`clock-tick ${i % 5 === 0 ? 'is-major' : ''}`}
+              style={{ transform: `rotate(${i * 6}deg)` }}
+              aria-hidden
+            />
+          ))}
+          {labels.map((label, i) => {
+            const angle = ((i + 1) % 12) * 30
+            const isCardinal = (i + 1) % 3 === 0
+            return (
               <span
-                key={i}
-                className={`clock-tick ${i % 5 === 0 ? 'is-major' : ''}`}
-                style={{ transform: `rotate(${i * 6}deg)` }}
-                aria-hidden
-              />
-            ))}
-            {labels.map((label, i) => {
-              const angle = ((i + 1) % 12) * 30
-              const isCardinal = (i + 1) % 3 === 0
-              return (
-                <span
-                  key={label + i}
-                  className={`clock-mark ethiopic ${isCardinal ? 'is-cardinal' : ''}`}
-                  style={{
-                    transform: `rotate(${angle}deg) translateY(-3.65rem) rotate(-${angle}deg)`,
-                  }}
-                >
-                  {isCardinal ? label : ''}
-                </span>
-              )
-            })}
-            <div className="hand hour" style={{ transform: `rotate(${hourAngle}deg)` }} />
-            <div className="hand minute" style={{ transform: `rotate(${minuteAngle}deg)` }} />
-            <div className="hand second" style={{ transform: `rotate(${secondAngle}deg)` }} />
-            <div className="clock-center" />
-          </div>
+                key={label + i}
+                className={`clock-mark ethiopic ${isCardinal ? 'is-cardinal' : ''}`}
+                style={{
+                  transform: `rotate(${angle}deg) translateY(-3.65rem) rotate(-${angle}deg)`,
+                }}
+              >
+                {isCardinal ? label : ''}
+              </span>
+            )
+          })}
+          <div className="hand hour" style={{ transform: `rotate(${hourAngle}deg)` }} />
+          <div className="hand minute" style={{ transform: `rotate(${minuteAngle}deg)` }} />
+          <div className="hand second" style={{ transform: `rotate(${secondAngle}deg)` }} />
+          <div className="clock-center" />
         </div>
 
         <div className="clock-meta">
           <p className={`clock-greeting ${chromeAm ? 'ethiopic' : ''}`}>{greeting}</p>
           <h1 className="clock-date">{gregorianDisplay}</h1>
           <p className="clock-ethiopian ethiopic">{dateInfo.ethiopian}</p>
-          <span className="clock-digital-badge ethiopic">{timeLabel}</span>
+          <p className="clock-digital ethiopic">{timeLabel}</p>
         </div>
       </div>
     </section>
