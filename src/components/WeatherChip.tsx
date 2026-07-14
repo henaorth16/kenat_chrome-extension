@@ -9,7 +9,7 @@ import {
   type WeatherSnapshot,
 } from '../lib/weather'
 import type { WeatherLocation } from '../lib/types'
-import { uiLang } from '../lib/types'
+import { calLang, uiLang } from '../lib/types'
 import { IoLocationSharp } from 'react-icons/io5'
 import './WeatherChip.css'
 
@@ -87,6 +87,8 @@ export function WeatherChip() {
   const { settings, dict, updateSettings } = useApp()
   const chromeLang = uiLang(settings.language)
   const chromeAm = chromeLang === 'am'
+  const dateLang = calLang(settings.language)
+  const dateAm = dateLang === 'am'
   
   const [weather, setWeather] = useState<WeatherSnapshot | null>(null)
   const [error, setError] = useState(false)
@@ -134,15 +136,14 @@ export function WeatherChip() {
     : null
   const unit = settings.tempUnit === 'celsius' ? '°C' : '°F'
 
-  // Format hour label (e.g. "14:00" -> "2 PM")
+  // Format hour label (e.g. "14:00" -> "2 PM" / Amharic locale)
   const formatHour = (isoString: string) => {
     try {
       const date = new Date(isoString)
-      let hours = date.getHours()
-      const ampm = hours >= 12 ? 'PM' : 'AM'
-      hours = hours % 12
-      hours = hours ? hours : 12 // the hour '0' should be '12'
-      return `${hours} ${ampm}`
+      return date.toLocaleTimeString(dateAm ? 'am-ET' : 'en-US', {
+        hour: 'numeric',
+        hour12: true,
+      })
     } catch {
       return ''
     }
@@ -150,10 +151,10 @@ export function WeatherChip() {
 
   // Format daily date to weekday name (e.g. "2026-07-14" -> "Tue")
   const formatDay = (dateString: string, idx: number) => {
-    if (idx === 0) return chromeAm ? 'ዛሬ' : 'Today'
+    if (idx === 0) return dateAm ? 'ዛሬ' : 'Today'
     try {
       const date = new Date(dateString)
-      return date.toLocaleDateString(chromeLang === 'am' ? 'am-ET' : 'en-US', { weekday: 'short' })
+      return date.toLocaleDateString(dateAm ? 'am-ET' : 'en-US', { weekday: 'short' })
     } catch {
       return ''
     }
@@ -279,7 +280,7 @@ export function WeatherChip() {
                   <div className="hourly-forecast-row">
                     {weather.hourly.map((h, idx) => (
                       <div key={idx} className="hourly-chip">
-                        <span className="hourly-time">{formatHour(h.time)}</span>
+                        <span className={`hourly-time ${dateAm ? 'ethiopic' : ''}`}>{formatHour(h.time)}</span>
                         <WeatherIcon code={h.weatherCode} size={20} />
                         <span className="hourly-temp">{convertTemp(h.temp, settings.tempUnit)}°</span>
                       </div>

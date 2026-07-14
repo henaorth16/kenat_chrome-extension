@@ -6,21 +6,21 @@ import {
   geezHourLabels,
   getEthiopianTimeNow,
 } from '../lib/kenat'
-import { calLang, uiLang } from '../lib/types'
+import { calLang } from '../lib/types'
 import './GeezClock.css'
 
-function getGreeting(hour: number, chromeAm: boolean): string {
-  if (hour >= 5 && hour < 12) return chromeAm ? 'እንደምን አደሩ 👋' : 'Good morning 👋'
-  if (hour >= 12 && hour < 17) return chromeAm ? 'እንደምን ዋሉ 👋' : 'Good afternoon 👋'
-  if (hour >= 17 && hour < 21) return chromeAm ? 'እንደምን አመሹ 👋' : 'Good evening 👋'
-  return chromeAm ? 'ሰላም 👋' : 'Good night 👋'
+function getGreeting(hour: number, useAmharic: boolean): string {
+  if (hour >= 5 && hour < 12) return useAmharic ? 'እንደምን አደሩ 👋' : 'Good morning 👋'
+  if (hour >= 12 && hour < 17) return useAmharic ? 'እንደምን ዋሉ 👋' : 'Good afternoon 👋'
+  if (hour >= 17 && hour < 21) return useAmharic ? 'እንደምን አመሹ 👋' : 'Good evening 👋'
+  return useAmharic ? 'ሰላም 👋' : 'Good night 👋'
 }
 
 export function GeezClock() {
   const { settings } = useApp()
   const useGeez = settings.numeralStyle === 'geez'
   const contentLang = calLang(settings.language)
-  const chromeAm = uiLang(settings.language) === 'am'
+  const greetingAm = contentLang === 'am'
   const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
@@ -40,14 +40,15 @@ export function GeezClock() {
 
   const gregorianDisplay = useMemo(() => {
     void now
-    const locale = chromeAm ? 'am-ET' : 'en-US'
+    // GC month/date stay English in combo; Amharic only when language is fully Amharic
+    const locale = settings.language === 'am' ? 'am-ET' : 'en-US'
     return now.toLocaleDateString(locale, {
       weekday: undefined,
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     })
-  }, [now, chromeAm])
+  }, [now, settings.language])
 
   const labels = useMemo(() => geezHourLabels(), [])
 
@@ -58,7 +59,7 @@ export function GeezClock() {
   const hourAngle = hour * 30 + minute * 0.5
   const secondAngle = second * 6
   const timeLabel = formatEthTime(ethTime, contentLang, useGeez)
-  const greeting = getGreeting(now.getHours(), chromeAm)
+  const greeting = getGreeting(now.getHours(), greetingAm)
 
   return (
     <section className="clock-block animate-in" aria-label={timeLabel}>
@@ -94,7 +95,7 @@ export function GeezClock() {
         </div>
 
         <div className="clock-meta">
-          <p className={`clock-greeting ${chromeAm ? 'ethiopic' : ''}`}>{greeting}</p>
+          <p className={`clock-greeting ${greetingAm ? 'ethiopic' : ''}`}>{greeting}</p>
           <h1 className="clock-date">{gregorianDisplay}</h1>
           <p className="clock-ethiopian ethiopic">{dateInfo.ethiopian}</p>
           <p className="clock-digital ethiopic">{timeLabel}</p>
