@@ -6,12 +6,41 @@
 }
 
 .weather-card {
+  position: relative;
+  isolation: isolate;
   min-width: 11.5rem;
   padding: 0.7rem 0.85rem;
   cursor: pointer;
   outline: none;
   font-family: var(--font-ui);
   text-align: left;
+  /* Match search-bar glass; frost on ::before so overflow/clip doesn't kill it */
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  overflow: hidden;
+}
+
+.weather-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--surface);
+  backdrop-filter: blur(28px) saturate(210%);
+  -webkit-backdrop-filter: blur(28px) saturate(210%);
+  pointer-events: none;
+}
+
+.weather-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .weather-card:hover {
