@@ -19,7 +19,7 @@ import {
   saveUserEvents,
 } from '../lib/storage'
 import type { AppSettings, CountdownItem, TodoItem, UserEventItem } from '../lib/types'
-import { DEFAULT_SETTINGS, uiLang, ACCENT_PRESETS } from '../lib/types'
+import { DEFAULT_SETTINGS, resolveAccent, uiLang } from '../lib/types'
 import { t, type Dictionary } from '../i18n'
 import { getToday } from '../lib/kenat'
 
@@ -78,10 +78,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (cancelled) return
 
       const next: AppSettings = isFresh
-        ? { ...DEFAULT_SETTINGS }
+        ? { ...DEFAULT_SETTINGS, widgets: { ...DEFAULT_SETTINGS.widgets } }
         : {
             ...DEFAULT_SETTINGS,
             ...storedSettings,
+            widgets: {
+              ...DEFAULT_SETTINGS.widgets,
+              ...(storedSettings.widgets ?? {}),
+            },
             // Migrate older en/am-only installs: keep choice; unknown → combo
             language:
               storedSettings.language === 'en' ||
@@ -89,6 +93,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
               storedSettings.language === 'combo'
                 ? storedSettings.language
                 : 'combo',
+            wallpaperMode:
+              storedSettings.wallpaperMode === 'solid' ||
+              storedSettings.wallpaperMode === 'unsplash' ||
+              storedSettings.wallpaperMode === 'custom'
+                ? storedSettings.wallpaperMode
+                : DEFAULT_SETTINGS.wallpaperMode,
+            clockNumeralStyle:
+              storedSettings.clockNumeralStyle === 'geez' ||
+              storedSettings.clockNumeralStyle === 'arabic' ||
+              storedSettings.clockNumeralStyle === 'roman'
+                ? storedSettings.clockNumeralStyle
+                : DEFAULT_SETTINGS.clockNumeralStyle,
+            customWallpaperUrl: storedSettings.customWallpaperUrl ?? '',
           }
 
       if (isFresh) await saveSettings(next)
@@ -120,7 +137,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     document.documentElement.style.colorScheme = resolvedTheme
 
     // Dynamically apply selected Accent Color properties
-    const activeAccent = ACCENT_PRESETS.find((p) => p.color === settings.accentColor) || ACCENT_PRESETS[0]
+    const activeAccent = resolveAccent(settings.accentColor, resolvedTheme)
     document.documentElement.style.setProperty('--accent', activeAccent.color)
     document.documentElement.style.setProperty('--accent-soft', activeAccent.soft)
     document.documentElement.style.setProperty('--accent-deep', activeAccent.deep)

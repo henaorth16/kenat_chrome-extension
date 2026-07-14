@@ -17,9 +17,14 @@ export function BottomDock({ onOpenSettings }: BottomDockProps) {
   }
 
   const toggleWallpaper = () => {
-    void updateSettings({
-      wallpaperMode: settings.wallpaperMode === 'solid' ? 'unsplash' : 'solid',
-    })
+    const modes = (
+      settings.customWallpaperUrl.trim()
+        ? ['solid', 'unsplash', 'custom']
+        : ['solid', 'unsplash']
+    ) as Array<'solid' | 'unsplash' | 'custom'>
+    const idx = Math.max(0, modes.indexOf(settings.wallpaperMode))
+    const next = modes[(idx + 1) % modes.length]
+    void updateSettings({ wallpaperMode: next })
   }
 
   return (
@@ -39,7 +44,7 @@ export function BottomDock({ onOpenSettings }: BottomDockProps) {
 
       <button
         type="button"
-        className={`dock-btn panel ${settings.wallpaperMode === 'unsplash' ? 'is-active' : ''}`}
+        className={`dock-btn panel ${settings.wallpaperMode !== 'solid' ? 'is-active' : ''}`}
         onClick={toggleWallpaper}
         title={chromeAm ? 'የጀርባ ምስል' : 'Toggle wallpaper'}
         aria-label={chromeAm ? 'የጀርባ ምስል' : 'Toggle wallpaper'}

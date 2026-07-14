@@ -19,6 +19,8 @@ export default defineManifest({
     'https://api.quotable.io/*',
     'https://zenquotes.io/*',
     'https://images.unsplash.com/*',
+    'https://*/*',
+    'http://*/*',
   ],
   icons: {
     '16': 'icons/icon16.png',

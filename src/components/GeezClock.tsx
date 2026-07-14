@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext'
 import {
   formatEthTime,
   formatToday,
-  geezHourLabels,
+  clockHourLabels,
   getEthiopianTimeNow,
 } from '../lib/kenat'
 import { calLang } from '../lib/types'
@@ -50,7 +50,10 @@ export function GeezClock() {
     })
   }, [now, settings.language])
 
-  const labels = useMemo(() => geezHourLabels(), [])
+  const labels = useMemo(
+    () => clockHourLabels(settings.clockNumeralStyle),
+    [settings.clockNumeralStyle],
+  )
 
   const hour = ethTime.hour % 12
   const minute = ethTime.minute
@@ -76,10 +79,12 @@ export function GeezClock() {
           {labels.map((label, i) => {
             const angle = ((i + 1) % 12) * 30
             const isCardinal = (i + 1) % 3 === 0
+            const markClass =
+              settings.clockNumeralStyle === 'geez' ? 'ethiopic' : ''
             return (
               <span
                 key={label + i}
-                className={`clock-mark ethiopic ${isCardinal ? 'is-cardinal' : ''}`}
+                className={`clock-mark ${markClass} ${isCardinal ? 'is-cardinal' : ''}`}
                 style={{
                   transform: `rotate(${angle}deg) translateY(-3.65rem) rotate(-${angle}deg)`,
                 }}

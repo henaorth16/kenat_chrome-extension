@@ -20,9 +20,21 @@ const WALLPAPERS = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=80',
 ]
 
-function pickWallpaper(): string {
+function pickDailyWallpaper(): string {
   const dayIndex = Math.floor(Date.now() / 86_400_000) % WALLPAPERS.length
   return WALLPAPERS[dayIndex]
+}
+
+function resolveWallpaperUrl(
+  mode: 'solid' | 'unsplash' | 'custom',
+  customUrl: string,
+): string | undefined {
+  if (mode === 'unsplash') return pickDailyWallpaper()
+  if (mode === 'custom') {
+    const url = customUrl.trim()
+    return url || undefined
+  }
+  return undefined
 }
 
 function Dashboard() {
@@ -38,8 +50,16 @@ function Dashboard() {
     return <div className="boot" aria-busy="true" />
   }
 
-  const wallpaperUrl =
-    settings.wallpaperMode === 'unsplash' ? pickWallpaper() : undefined
+  const wallpaperUrl = resolveWallpaperUrl(
+    settings.wallpaperMode,
+    settings.customWallpaperUrl,
+  )
+  const visibleWidgets = [
+    settings.widgets.calendar,
+    settings.widgets.agenda,
+    settings.widgets.countdown,
+    settings.widgets.todo,
+  ].filter(Boolean).length
 
   return (
     <div className="app-container">
@@ -62,16 +82,27 @@ function Dashboard() {
         </section>
 
         <section className="bottom-zone">
-          <div className="bottom-widgets">
-            <CalendarGrid
-              year={viewMonth.year}
-              month={viewMonth.month}
-              onMonthChange={setViewMonth}
-            />
-            <AgendaPanel year={viewMonth.year} month={viewMonth.month} />
-            <CountdownPanel />
-            <TodoPanel />
-          </div>
+          {visibleWidgets > 0 && (
+            <div
+              className="bottom-widgets"
+              style={{
+                gridTemplateColumns: `repeat(${Math.min(visibleWidgets, 4)}, minmax(0, 1fr))`,
+              }}
+            >
+              {settings.widgets.calendar && (
+                <CalendarGrid
+                  year={viewMonth.year}
+                  month={viewMonth.month}
+                  onMonthChange={setViewMonth}
+                />
+              )}
+              {settings.widgets.agenda && (
+                <AgendaPanel year={viewMonth.year} month={viewMonth.month} />
+              )}
+              {settings.widgets.countdown && <CountdownPanel />}
+              {settings.widgets.todo && <TodoPanel />}
+            </div>
+          )}
 
           <footer className="app-footer">
             <QuoteWidget />

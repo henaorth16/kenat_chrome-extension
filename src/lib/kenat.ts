@@ -60,6 +60,37 @@ export function geezHourLabels(): string[] {
   return Array.from({ length: 12 }, (_, i) => toGeez(i + 1))
 }
 
+export function arabicHourLabels(): string[] {
+  return Array.from({ length: 12 }, (_, i) => String(i + 1))
+}
+
+const ROMAN_HOURS = [
+  'I',
+  'II',
+  'III',
+  'IV',
+  'V',
+  'VI',
+  'VII',
+  'VIII',
+  'IX',
+  'X',
+  'XI',
+  'XII',
+] as const
+
+export function romanHourLabels(): string[] {
+  return [...ROMAN_HOURS]
+}
+
+export function clockHourLabels(
+  style: 'geez' | 'arabic' | 'roman',
+): string[] {
+  if (style === 'arabic') return arabicHourLabels()
+  if (style === 'roman') return romanHourLabels()
+  return geezHourLabels()
+}
+
 export function createMonthGrid(options: {
   year: number
   month: number
